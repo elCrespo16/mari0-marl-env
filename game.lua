@@ -1100,7 +1100,7 @@ function game_draw()
 		if flagx then
 			love.graphics.draw(flagimg, math.floor((flagimgx-1-xscroll)*16*scale), ((flagimgy)*16-8)*scale, 0, scale, scale)
 			if levelfinishtype == "flag" then
-				properprint2(flagscore, math.floor((flagimgx+4/16-xscroll)*16*scale), ((14-flagimgy)*16-8)*scale, 0, scale, scale)
+				properprint2(flagscore, math.floor((flagimgx+4/16-xscroll)*16*scale), ((14-flagimgy)*16-8)*scale)
 			end
 		end
 
