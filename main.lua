@@ -10,20 +10,33 @@ end
 
 function create_channel()
     env_channel = love.thread.getChannel("pythonCommands")
+    send_channel = love.thread.getChannel("loveRewards")
 end
 
+--Constant message obtained when thread channel gets nothing
+default_channel_pop = "no_command"
+
 function love.load(args)
-    if args[1] == "env" or "dev" then
+    if args[1] == "env" or args[1] == "dev" then
+        print(love.filesystem.getSaveDirectory())
         if args[1] == "env" then
-			environment = true
-		elseif args[1] == "dev" then
-			dev = true
-		end
+            environment = "env"
+        elseif args[1] == "dev" then
+            environment = "dev"
+        else 
+            environment = "play"
+        end
         create_thread()
         create_channel()
         env_thread:start()
-		command = "test"
+        command = default_channel_pop
     end
+    if not args[2] == nil then
+        print(love.window.getDisplayCount())
+        -- local display = args[2]
+        -- local width, height, flags = love.window.getMode()
+        -- love.window.updateMode(width, height, {["display"] = display})
+    end 
     marioversion = 1006
     versionstring = "version 1.6"
     shaderlist = love.filesystem.getDirectoryItems("shaders/")
@@ -114,7 +127,7 @@ function love.load(args)
     require "variables"
     require "class"
     require "sha1"
-	require "env.env_commands"
+    require "env.env_commands"
     require "intro"
     require "menu"
     require "levelscreen"
@@ -918,7 +931,6 @@ function love.load(args)
     intro_load()
 end
 
-
 function love.update(dt)
     if music then
         music:update()
@@ -963,16 +975,17 @@ function love.update(dt)
     end
 
     -- netplay_update(dt)
-    if not environment then
-		keyprompt_update()
-	end
-	if environment or dev then
-		last_command = command
-		command = env_channel:pop()
-		if command ~= last_command then
-			parse_command(command)
-		end
-	end
+    if not environment == "env" then
+        keyprompt_update()
+    end
+    if environment == "env" or environment == "dev" then
+        command = env_channel:pop() or default_channel_pop
+        if command ~= default_channel_pop then
+            local c = parse_command(command)
+            local response = c:run()
+            send_channel:push(response)
+        end
+    end
 
     if gamestate == "menu" or gamestate == "mappackmenu" or gamestate == "onlinemenu" or gamestate == "options" then
         menu_update(dt)
@@ -1410,7 +1423,7 @@ function changescale(s, fullscreen)
 end
 
 function love.keypressed(key, unicode)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if keyprompt then
             keypromptenter("key", key)
@@ -1450,7 +1463,7 @@ function love.keypressed(key, unicode)
 end
 
 function love.keyreleased(key, unicode)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if gamestate == "menu" or gamestate == "options" then
             menu_keyreleased(key, unicode)
@@ -1461,7 +1474,7 @@ function love.keyreleased(key, unicode)
 end
 
 function love.mousepressed(x, y, button)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if gamestate == "menu" or gamestate == "mappackmenu" or gamestate == "onlinemenu" or gamestate == "options" then
             menu_mousepressed(x, y, button)
@@ -1490,7 +1503,7 @@ function love.mousepressed(x, y, button)
 end
 
 function love.mousereleased(x, y, button)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if gamestate == "menu" or gamestate == "options" then
             menu_mousereleased(x, y, button)
@@ -1505,7 +1518,7 @@ function love.mousereleased(x, y, button)
 end
 
 function love.wheelmoved(x, y)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if gamestate == "game" then
             game_wheelmoved(x, y)
@@ -1530,7 +1543,7 @@ function love.wheelmoved(x, y)
 end
 
 function love.joystickpressed(joystick, button)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if keyprompt then
             keypromptenter("joybutton", joystick:getID(), button)
@@ -1546,7 +1559,7 @@ function love.joystickpressed(joystick, button)
 end
 
 function love.joystickreleased(joystick, button)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         if gamestate == "menu" or gamestate == "options" then
             menu_joystickreleased(joystick:getID(), button)
@@ -1557,7 +1570,7 @@ function love.joystickreleased(joystick, button)
 end
 
 function love.joystickaxis(joystick, axis, value)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         local joysticks, found = love.joystick.getJoysticks(), false
         for i, v in ipairs(joysticks) do
@@ -1594,7 +1607,7 @@ function love.joystickaxis(joystick, axis, value)
     end
 end
 function love.joystickhat(joystick, hat, direction)
-    if not environment then
+    if environment ~= "env" then
         -- listen to keys when user is playing
         local joysticks, found = love.joystick.getJoysticks(), false
         for i, v in ipairs(joysticks) do
@@ -1875,3 +1888,8 @@ function loadcustombackground()
     end
 end
 
+
+function love.quit()
+    env_thread:wait()
+    return false
+end
