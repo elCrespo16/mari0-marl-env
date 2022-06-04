@@ -1,0 +1,141 @@
+\section{Gestión económica}
+En esta sección se realizará un estudio completo con el fin de identificar y estimar los costes asociados a este proyecto y así determinar su viabilidad y sostenibilidad económica. Los costes están distribuidos en costes de personal, genéricos, de contingencia y de imprevistos.
+
+\subsection{Costes de personal}
+En primer lugar, para poder estimar los costes relacionados con el personal es necesario determinar los costes asociados a cada rol del proyecto. El rol de director del proyecto es un rol compartido entre el director, el codirector y el autor del TFG. El rol del analista y el rol del programador están desarrollados individualmente por el autor del TFG. En la tabla \ref{tab:remuneracion} se pueden ver las retribuciones en euros por hora según cada rol. Estas estimaciones se han obtenido a partir de la páginas webs PagePersonnel \cite{pagePersonel} y GlassDoor \cite{glassdoor}. Además, a estos valores se les ha añadido el coste de la aportación a la seguridad social (SS) que corresponde a añadir aproximadamente un 30 \% del valor bruto del salario.  
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{ l  c  c  c }
+        \textbf{Rol} & \textbf{Sueldo bruto} & \textbf{SS} & \textbf{Retribución} \\ \hline
+        Director del proyecto & 22 € / h & 6.60 € / h & 28.60 € / h \\ 
+        Analista & 19 € / h & 5.7 € / h & 24.7 € / h \\
+        Programador & 20 € / h & 6 € / h & 26 € / h \\
+        \hline
+         \textbf{Total} & 61 € / h & 18.30 € / h & \textbf{79.3 € / h}  \\
+        \end{tabular}
+        \caption{Retribuciones para cada rol del proyecto [Elaboración propia]}
+        \label{tab:remuneracion}
+    \end{center}
+\end{table}
+Una vez calculado los costes por hora de cada rol, es posible calcular el CPA (coste por actividad). Esto se consigue realizando una estimación del coste de las actividades definidas en el apartado de descripción de las tareas. En la tabla \ref{tab:coste_tarea} podemos ver los roles que participan en cada tarea y su coste asociado.
+
+\begin{table}[ht]
+    \begin{center}
+        \begin{tabular}{ c  l  c  c  c  c }
+        \textbf{Código} & \textbf{Tarea} & \textbf{D} & \textbf{A} & \textbf{P} & \textbf{Coste}\\ \hline
+\textbf{T1} & \textbf{Documentación} &  \textbf{27 h} & \textbf{113 h} & \textbf{40 h} & \textbf{4603.3 €}  \\ \hline
+        T1.1 & Contexto y Alcance                           & 5 h   & 15 h  &       & 513,5 € \\
+        T1.2 & Planificación Temporal                       &       & 10 h  &       & 247 € \\
+        T1.3 & Presupuesto y sostenibilidad                 &       & 10 h  &       & 247 € \\
+        T1.4 & Memoria final                                & 20 h  & 45 h  &  5 h  & 1813.5 € \\
+        T1.5 & Presentación                                 &       & 7 h   &  3 h  & 250.9 € \\
+        T1.6 & Reuniones                                    & 2 h   & 2 h   &  2 h  & 158.6 € \\ 
+        T1.7 & Documentación del entorno                    &       & 20 h  & 20 h  & 1014 €\\ 
+        T1.8 & Documentación del código                     &       & 4 h   & 10 h  & 358.8 € \\ 
+        \hline
+\textbf{T2} & \textbf{Creación del entorno} & \textbf{10 h} & \textbf{20 h} & \textbf{240 h} & \textbf{6890 €} \\ \hline
+        T2.1 & Búsqueda y valoración del estado del arte    & 10 h  & 20 h  & 25 h  & 1430 € \\
+        T2.2 & Aprendizaje del entorno                      &       &       & 40 h  & 1040 €\\
+        T2.3 & Diseño de las nuevas características         &       &       & 40 h  & 1040 €\\
+        T2.4 & Implementación de las nuevas características &       &       & 80 h  & 2080 €\\
+        T2.5 & Testing y creación de los agentes            &       &       & 50 h  & 1300 €\\
+         \hline
+         \textbf{Total} & & \textbf{37 h} & \textbf{133 h} & \textbf{280 h} & \textbf{11493.3 €} \\
+        \end{tabular}
+        \caption{Resumen detallado de los costes de las tareas que forman el proyecto. Leyenda D: Director, A: Analista, P: Programador [Elaboración propia]}
+        \label{tab:coste_tarea}
+    \end{center}
+\end{table}
+
+\subsection{Costes genéricos}
+Los siguientes costes a considerar son los costes genéricos asociados a todo el proyecto. Consideraremos como costes genéricos las amortizaciones, el espacio de trabajo y servicios como el consumo eléctrico y el de internet.
+
+\subsubsection*{Amortizaciones}
+En las amortizaciones debemos tener en cuenta varios elementos. En primer lugar consideraremos los ordenadores para cada trabajador. Son necesarios ordenadores portátiles de gama media que podemos estimar un coste medio de 500 €. Además, el servidor también puede ser un ordenador pero en este caso será necesario uno de gama alta y podemos estimar su valor en 800 €. Los precios han sido extraídos a partir de \cite{mediamark}. Puesto que hacienda permite amortizar el hardware en 3 años, las horas reales por año son 1780 y la duración del proyecto son 450 horas, la amortización de estos recursos es de: \\
+
+(Precio total * Horas de uso) / Horas reales de amortización = ((500 * 3 + 800) * 450) / (3 * 1780) = \textbf{193.82 €}.  
+
+Además debemos considerar la compra del mobiliario necesario para trabajar, debido a que el espacio de trabajo no necesariamente dispone de este. Considerando un precio de 120 € por el conjunto de silla y escritorio \cite{ikea} y teniendo en cuenta que hacienda permite amortizar el mobiliario en 5 años, el cálculo de la amortización siguiendo la fórmula anterior es:  
+
+((120 * 3) * 450) / (5 * 1780) = \textbf{18.20 €}. 
+
+En este caso no tenemos en cuenta el software porque en principio todas las herramientas que emplearemos son de uso gratuito. Aún así, es posible que sea necesario usar software con licencia pero esto se tendrá en cuenta en los imprevistos. En resumen, el valor total de las amortizaciones es de \textbf{Total: 212.02 €}
+
+\subsubsection*{Espacio de trabajo y servicios}
+Estimamos basándonos en \cite{oficinas} un precio de 500 € por una oficina de trabajo de 50 metros cuadrados donde realizar el proyecto . El coste total del espacio en el tiempo de uso será ((500 * 12) * 450) / 1780 = \textbf{1516.85 €}  
+
+El coste actual de la electricidad es de aproximadamente 0.32335 €/kWh \cite{precioLuz}. Podemos ver en la tabla \ref{tab:energia} los costes relacionados con la energía.
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{ l  c  c  c  c }
+        \textbf{Dispositivo} & \textbf{Potencia (Unidad)} & \textbf{Horas} & \textbf{Consumo} & \textbf{Coste} \\
+        \hline
+        Ordenadores portátiles x 3 & 30 W & 450 h & 40.5 kWh & 13.09 € \\
+        Servidor & 35 W & 50 h & 1.75 kWh & 0.56 € \\
+        \hline
+        \textbf{Total} & & & & \textbf{13.65 €} \\
+        \end{tabular}
+        \caption{Análisis de los costes de la electricidad [Elaboración propia]}
+        \label{tab:energia}
+    \end{center}
+\end{table}
+
+Finalmente tendremos en cuenta la tarifa de internet. Según los principales proveedores de internet, una tarifa media consistiría en 50 € mensuales. Por lo tanto el coste del internet sería de ((50 * 12)* 450) / 1780 = \textbf{151.68 €}. Es importante tener en cuenta que en la estimación de estos costes, los cálculos se han realizado a partir del coste por hora de cada servicio multiplicado por el número de horas de necesarias de este.
+
+En conclusión, podemos observar que los costes totales genéricos aportan una suma de \textbf{1894.2 €}.
+
+\subsection{Contingencias}
+
+Puesto que no es posible tener todos las casuísticas en cuenta, es posible que surjan contratiempos no esperados e imprevisibles durante el proyecto. A causa de esto, se prepara una partida de contingencias para estar preparados para estas situaciones. Los valores típicos de contingencias para proyectos de desarrollo de software son de entre el 10 y el 20 por ciento. Nosotros usaremos un valor medio de 15 \%. Este coste se calcula teniendo en cuenta los costes genéricos y los costes totales por tarea, dando lugar a (1876 + 11493.3) * 0.15 = \textbf{2005.40 €}.
+
+\subsection{Imprevistos}
+
+Por último, es necesario valorar el coste que supondría llevar a cabo los planes alternativos en caso de afrontar los imprevistos identificados en los apartados anteriores. Este coste se calcula teniendo en cuenta el precio total del plan alternativo, multiplicado por la probabilidad de que este suceda. Como hemos dicho, la probabilidad de que se necesite software con licencia es algo elevada. Por lo demás, el resto de imprevistos son poco probables. En la tabla \ref{tab:imprevistos} se muestran estos costes.
+
+\begin{table}[ht]
+    \begin{center}
+        \begin{tabular}{ l  c  c  c }
+        \textbf{Imprevisto} & \textbf{Precio} & \textbf{Probabilidad} & \textbf{Coste} \\
+        \hline
+        Licencia de software & 200 € & 30 \% & 60 € \\
+        Nuevo ordenador & 500 € & 10 \%  & 50 € \\
+        Creación de un entorno desde 0 (40 h) & 1040 € & 15 \% & 156 €\\
+        Incremento en el tiempo de implementación (20 h) & 520 € & 10 \% & 52 € \\
+        \hline
+        \textbf{Total} & & & \textbf{318 €} \\
+        \end{tabular}
+        \caption{Análisis de los costes de imprevistos [Elaboración propia]}
+        \label{tab:imprevistos}
+    \end{center}
+\end{table}
+
+\subsection{Coste total del proyecto}
+En la tabla \ref{tab:coste_total} se muestra el coste total del proyecto, sumando el coste total de todas las secciones anteriores.
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{ l  c }
+        \textbf{Concepto} & \textbf{Coste} \\
+        \hline
+        Costes de personal      & 11493.3 € \\
+        Costes genéricos        & 1894.2 €  \\
+        Contingencias           & 2005.40 € \\
+        Imprevistos             & 318 €  \\
+        \hline
+        \textbf{Total} & \textbf{15710.9 €} \\
+        \end{tabular}
+        \caption{Desglose del coste total del proyecto [Elaboración propia]}
+        \label{tab:coste_total}
+    \end{center}
+\end{table}
+
+\subsection{Control de gestión}
+Durante el transcurso del proyecto se realizarán revisiones de costos periódicas para asegurar que la desviación de estos en comparación con los estimados en este capítulo es la mínima posible. Se aprovecharán algunas de las reuniones semanales para realizar estas revisiones. Se usarán las métricas siguientes para determinar las desviaciones:
+
+Desviación de coste = (CE - CR) * CHR  
+Desviación de consumo = (CHE - CHR) * CE  
+
+donde: CE: Consumo estimado, CR: consumo real, CHR: consumo de horas reales, CHE: consumo de horas estimado.  
+
+Gracias a este control podemos detectar si se ha producido una desviación, en que tarea se ha producido y de que tipo de desviación se trata. Si las desviaciones se deben a imprevistos ya considerados en los apartados de riesgos, se imputarán a la partida de imprevistos mientras que si se tratan de otro tipo de desviaciones, se imputarán a la partida de contingencia. Y finalmente si las desviaciones son demasiado grandes y como última medida, se ajustará el alcance del proyecto y se replanificará para ceñirse al presupuesto disponible. Y en caso favorable de haber sobre-estimado las horas para las tareas, se usarán las horas sobrantes para adelantar trabajo y acabar antes. Puesto que el alcance del proyecto ya es extenso, no plantearemos la posibilidad de posibles ampliaciones a menos que el sobrante de horas sea excesivo.

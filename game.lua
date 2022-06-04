@@ -558,7 +558,7 @@ function game_update(dt)
 	end
 
 	if players == 2 then
-		--updatesplitscreen()
+		-- updatesplitscreen()
 	end
 
 	--SPRITEBATCH UPDATE and CASTLEREPEATS
@@ -2213,6 +2213,23 @@ function startlevel(level)
 		end
 	end
 
+	distance_to_end = 0
+	last_distance = 0
+	for i = 1, players do
+        marioKeys[i] = {}
+        marioKeys[i]["left"] = {}
+        marioKeys[i]["right"] = {}
+        marioKeys[i]["left"] = 0
+        marioKeys[i]["right"] = 0
+		if flagx then
+			distance_to_end = objects["screenboundary"]["flag"].x - objects["player"][i].x
+		end
+	
+		if axex then
+			distance_to_end = objects["screenboundary"]["axe"].x - objects["player"][i].x
+		end
+    end
+
 	--PLAY BGM
 	if intermission == false then
 		playmusic()
@@ -3851,16 +3868,33 @@ function playsound(sound)
 end
 
 function runkey(i)
+	if environment == "env" or environment == "dev" then
+		if marioKeys[i]["right"] > 0 or marioKeys[i]["left"] > 0 then
+			return true
+		end
+	end
 	local s = controls[i]["run"]
 	return checkkey(s)
 end
 
 function rightkey(i)
+	if environment == "env" or environment == "dev" then
+		if marioKeys[i]["right"] > 0 then
+			marioKeys[i]["right"] = marioKeys[i]["right"] - 1
+			return true
+		end
+	end
 	local s = controls[i]["right"]
 	return checkkey(s)
 end
 
 function leftkey(i)
+	if environment == "env" or environment == "dev" then
+		if marioKeys[i]["left"] > 0 then
+			marioKeys[i]["left"] = marioKeys[i]["left"] - 1
+			return true
+		end
+	end
 	local s = controls[i]["left"]
 	return checkkey(s)
 end
@@ -3909,7 +3943,9 @@ function checkkey(s)
 			end
 		end
 	else
-		if love.keyboard.isDown(s[1]) then
+		if environment == "env" then
+			return false
+		elseif love.keyboard.isDown(s[1]) then
 			return true
 		else
 			return false

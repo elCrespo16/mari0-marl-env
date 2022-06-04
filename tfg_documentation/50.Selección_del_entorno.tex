@@ -1,0 +1,39 @@
+\section{Selección final del entorno}
+Esta sección es una de las partes más cruciales del proyecto, ya que el resto del TFG depende de la elección que hagamos sobre el entorno. La primera decisión que se ha tomado ha sido usar un entorno por adaptar en vez de usar un entorno ya funcional. Tomamos esta decisión por las siguientes razones:
+
+\begin{itemize}
+    \item Adaptar un entorno no funcional supone un mayor reto. Aunque esto parezca una desventaja también significa que el autor del TFG deberá aplicar más de los conocimientos aprendidos en la universidad y que deberá adquirir conocimientos por su cuenta y fuera de su zona de confort.
+    \item Adaptar un entorno no funcional aporta más variedad a los entornos MARL, además de crear la posibilidad de que otras personas modifiquen el nuevo entorno a sus necesidades.
+    \item Adaptar un entorno no creado para el entrenamiento de agentes creará un nuevo reto para las inteligencias artificiales existentes. En comparación, una modificación de un entorno ya funcional probablemente no represente demasiada diferencia.
+\end{itemize}
+
+\subsection{TrinityCore}
+
+Una vez decidido que se usaría un entorno no funcional, debemos filtrar entre los entornos encontrados. A primera vista y solo con la información de la tabla \ref {tab:no-funcionales} podríamos suponer que el entorno más interesante es TrinityCore. Y aunque ciertamente es el entorno que más características tiene en comparación con el resto, esto a su vez también es uno de los factores por lo que ha sido descartado. Este entorno sigue un paradigma de servidor cliente, debido a que sirve como servidor del videojuego World of Warcraft. Este paradigma complica la comprensión del entorno. Además, el World of Warcraft ya es un juego de por sí complejo con una gran cantidad de mecánicas. Y para finalizar, está escrito en C++, un lenguaje muy potente pero poco legible complicando aún más el proceso. Este entorno sería una buena elección en caso de disponer de más tiempo y de un equipo más grande, pero  hemos considerado que queda fuera del alcance de este proyecto.
+
+\subsection{Teeworlds}
+
+El siguiente candidato interesante según la lista sería Teeworlds. Este entorno tiene mucho potencial de convertirse en un entorno de MARL. Esto se debe a que es uno de los pocos entornos que introduce un tipo de cooperación que requiere de sincronización entre los agentes. En este entorno los agentes disponen de diferentes formas de interactuar entre ellos. Una de ellas es el gancho. Este modifica completamente la estructura de movimiento del jugador, ya que este obtiene la capacidad de agarrarse a estructuras u otros agentes desde la distancia. Esto permite que un jugador sirva como punto de apoyo de otro para subir a superficies elevadas. Veamos por ejemplo la figura \ref {fig:teeworlds-ex}. En esta imagen podemos ver como el agente marrón está enganchado al agente negro, usándolo como punto de apoyo para subir. Si el agente negro no se hubiera colocado en esa posición en el momento en el que el agente marrón saltaba, este paso no se podría realizar. Además, el gancho no es la única mecánica para la cooperación con timing que ofrece el juego. El bazooka o el martillo también causan efectos similares moviendo a ambos agentes.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{img/teewords-ex.png}
+    \caption{Entorno gráfico de Teeworlds \cite {teeworlds}}
+    \label{fig:teeworlds-ex}
+\end{figure}
+
+Además este videojuego también permite la competición entre agentes. Por estos motivos, en la primera elección que hicimos sobre el entorno, Teeworlds fue el entorno escogido. Pero después cuando ya estábamos realizando las primeras tareas de aprendizaje del entorno decidimos reconsiderar la decisión. Decidimos reconsiderar la decisión por motivos similares a los de TrinityCore. El entorno también ofrecía el patrón cliente-servidor, está escrito en C++ y posee tantas características que se necesitaría demasiado tiempo para realizar una adaptación que sacará todo su potencial. 
+
+\subsection{The Battle for Westnoth}
+
+Este entorno fue descartado, debido a que no incluye aparentemente ninguna mecánica que otros entornos no posean. Es bastante comparable al entorno de Neural MMO, aunque Battle for  Westnoth incluye más características.
+
+\subsection{Mari0 y Sol Standard}
+
+Los últimos dos entornos son Mari0 y Sol Standard. Ambos entornos no parecen muy atractivos solo con observar la tabla \ref{tab:no-funcionales}, pero la realidad no es del todo así. Ambos entornos poseen características muy interesantes. Por un lado Sol Standard dispone de muchas mecánicas de rol, ya que cada personaje posee habilidades diferentes al resto. El único problema es que esta característica es muy interesante cuando se trata de cooperación, pero este entorno solo se basa en la competición entre dos diferentes agentes. Otra ventaja que tiene este juego es que es lo suficientemente variado para ser usado como entorno pero no demasiado para quedar descartado como los ejemplos anteriores.  
+
+\par Por otro lado, Mari0 también posee unas características muy interesantes. En primer lugar, al igual que Teeworlds, la pistola de portales modifica completamente el patrón de movimiento del personaje, dando muchas más posibilidades. Además, también requiere de cooperación coordinada, puesto que ciertos puzles requieren de un tiempo específico para que los agentes interactúen entre ellos. Adicionalmente este entorno es muy adaptable en el futuro puesto que dispone de un creador de niveles incorporado en el juego. Otra característica a tener en cuenta es que está programado en Lua, un lenguaje muy legible, parecido a Python en ciertos aspectos. Finalmente, igual que Sol Standard este juego tiene el tamaño perfecto para este trabajo. En contraste, este entorno también tiene una desventaja: los módulos del código no están ordenados y es complicado seguir el hilo de la ejecución del programa. Pero esta desventaja no es comparable a su gran cantidad de ventajas.
+
+\subsection{Decisión final del entorno}
+
+Finalmente decidimos quedarnos con el entorno de \textbf{Mari0} por encima del resto de entornos. Esto se debe a la gran cantidad de ventajas que posee el entorno en comparación con el resto, además de por la preferencia del autor del TFG. Mari0 es una combinación de dos juegos clásicos que todo amante de los videojuegos debe conocer: el mítico Mario Bros, junto con el juego de puzles P0rtal. Ambos podrían considerarse obras de arte y su mezcla es realmente divertida.

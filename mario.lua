@@ -914,7 +914,7 @@ function mario:update(dt)
 				self.gravity = yaccelerationjumping
 			end
 
-			if self.speedy > 0 then
+			if self.speedy >= 0 then
 				self.jumping = false
 				self.falling = true
 			end
@@ -1018,38 +1018,40 @@ end
 
 function mario:updateangle()
 	--UPDATE THE PLAYER ANGLE
-	if self.playernumber == mouseowner then
-		local scale = scale
-		if shaders and shaders.scale then scale = shaders.scale end
-		self.pointingangle = math.atan2(self.x+6/16-xscroll-(love.mouse.getX()/16/scale), (self.y+6/16-.5)-(love.mouse.getY()/16/scale))
-	elseif #controls[self.playernumber]["aimx"] > 0 then
-		local x, y
+	if environment ~= "env" then
+		if self.playernumber == mouseowner then
+			local scale = scale
+			if shaders and shaders.scale then scale = shaders.scale end
+			self.pointingangle = math.atan2(self.x+6/16-xscroll-(love.mouse.getX()/16/scale), (self.y+6/16-.5)-(love.mouse.getY()/16/scale))
+		elseif #controls[self.playernumber]["aimx"] > 0 then
+			local x, y
 
-		local joysticks = love.joystick.getJoysticks()
-		local s = controls[self.playernumber]["aimx"]
-		if s[1] == "joy" and joysticks[s[2]] ~= nil then
-			x = -joysticks[s[2]]:getAxis(s[4])
-			if s[5] == "neg" then
-				x = -x
+			local joysticks = love.joystick.getJoysticks()
+			local s = controls[self.playernumber]["aimx"]
+			if s[1] == "joy" and joysticks[s[2]] ~= nil then
+				x = -joysticks[s[2]]:getAxis(s[4])
+				if s[5] == "neg" then
+					x = -x
+				end
 			end
-		end
-		
-		s = controls[self.playernumber]["aimy"]
-		if s[1] == "joy" and joysticks[s[2]] ~= nil then
-			y = -joysticks[s[2]]:getAxis(s[4])
-			if s[5] == "neg" then
-				y = -y
+			
+			s = controls[self.playernumber]["aimy"]
+			if s[1] == "joy" and joysticks[s[2]] ~= nil then
+				y = -joysticks[s[2]]:getAxis(s[4])
+				if s[5] == "neg" then
+					y = -y
+				end
 			end
-		end
 
-		if not x or not y then
-			return
-		end
+			if not x or not y then
+				return
+			end
 
-		if math.abs(x) > joystickaimdeadzone or math.abs(y) > joystickaimdeadzone then
-			self.pointingangle = math.atan2(x, y)
-			if self.pointingangle == 0 then
-				self.pointingangle = 0 --this is really silly, but will crash the game if I don't do this. It's because it's -0 or something. I'm not good with computers.
+			if math.abs(x) > joystickaimdeadzone or math.abs(y) > joystickaimdeadzone then
+				self.pointingangle = math.atan2(x, y)
+				if self.pointingangle == 0 then
+					self.pointingangle = 0 --this is really silly, but will crash the game if I don't do this. It's because it's -0 or something. I'm not good with computers.
+				end
 			end
 		end
 	end
@@ -2595,6 +2597,8 @@ end
 function mario:die(how)
 	print("Death cause: " .. how)
 
+	marioDeads[self.playernumber] = marioDeads[self.playernumber] + 1
+
 	if how ~= "pit" and how ~= "time" then
 		if self.size > 1 then
 			self:shrink()
@@ -2931,6 +2935,7 @@ function mario:flag()
 	self.climbframe = 2
 	self.active = false
 	self:setquad()
+	nextLevelReward = true
 	levelfinished = true
 	levelfinishtype = "flag"
 	subtractscore = false
@@ -2996,6 +3001,7 @@ function mario:axe()
 	levelfinishtype = "castle"
 	levelfinishedmisc = 0
 	levelfinishedmisc2 = 1
+	nextLevelReward = true
 	if marioworld == 8 then
 		levelfinishedmisc2 = 2
 	end

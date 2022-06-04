@@ -1,0 +1,4 @@
+name=bowser cti
+author=pixelworker
+description=twice the portalstwice the fun!
+lives=0

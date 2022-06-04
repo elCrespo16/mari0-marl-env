@@ -5,7 +5,7 @@
 ]] 
 
 function create_thread()
-    env_thread = love.thread.newThread("env/communication_socket.lua")
+    env_thread = love.thread.newThread("gym_env/communication_socket.lua")
 end
 
 function create_channel()
@@ -17,26 +17,25 @@ end
 default_channel_pop = "no_command"
 
 function love.load(args)
+    require "gym_env.env_commands"
+    environment = "play"
+    marioDeads = {}
+    for i = 1, 4 do
+        marioDeads[i] = 0
+    end
+    marioKeys = {}
+    distance_to_end = 0
+    last_distance = false
+    nextLevelReward = false
+    factory = Factory:new()
+    register_all_commands()
     if args[1] == "env" or args[1] == "dev" then
-        print(love.filesystem.getSaveDirectory())
-        if args[1] == "env" then
-            environment = "env"
-        elseif args[1] == "dev" then
-            environment = "dev"
-        else 
-            environment = "play"
-        end
+        environment = args[1]
         create_thread()
         create_channel()
         env_thread:start()
-        command = default_channel_pop
+        command = nil
     end
-    if not args[2] == nil then
-        print(love.window.getDisplayCount())
-        -- local display = args[2]
-        -- local width, height, flags = love.window.getMode()
-        -- love.window.updateMode(width, height, {["display"] = display})
-    end 
     marioversion = 1006
     versionstring = "version 1.6"
     shaderlist = love.filesystem.getDirectoryItems("shaders/")
@@ -123,11 +122,11 @@ function love.load(args)
     properprint(loadingtext, 25 * 8 * scale - string.len(loadingtext) * 4 * scale, 108 * scale)
     love.graphics.present()
     -- require ALL the files!
+    json = require "gym_env.json"
     require "shaders"
     require "variables"
     require "class"
     require "sha1"
-    require "env.env_commands"
     require "intro"
     require "menu"
     require "levelscreen"
@@ -975,15 +974,19 @@ function love.update(dt)
     end
 
     -- netplay_update(dt)
-    if not environment == "env" then
+    if environment ~= "env" then
         keyprompt_update()
     end
     if environment == "env" or environment == "dev" then
-        command = env_channel:pop() or default_channel_pop
-        if command ~= default_channel_pop then
+        command = env_channel:pop()
+        if command then
             local c = parse_command(command)
-            local response = c:run()
-            send_channel:push(response)
+            for i, com in pairs(c) do
+                local response = com:execute()
+                if response then
+                    send_channel:push(response)
+                end
+            end
         end
     end
 
@@ -1402,14 +1405,14 @@ function changescale(s, fullscreen)
     if fullscreen then
         fullscreen = true
         scale = 2
-        love.window.setMode(800, 600, {
+        love.window.updateMode(800, 600, {
             fullscreen = fullscreen,
             vsync = vsync
         })
     end
 
     uispace = math.floor(width * 16 * scale / 4)
-    love.window.setMode(width * 16 * scale, 224 * scale, {
+    love.window.updateMode(width * 16 * scale, 224 * scale, {
         fullscreen = fullscreen,
         vsync = vsync
     }) -- 27x14 blocks (15 blocks actual height)
@@ -1423,6 +1426,17 @@ function changescale(s, fullscreen)
 end
 
 function love.keypressed(key, unicode)
+    if environment == "dev" and key == "p" then
+        if players then
+            for i = 1, players do
+                if mouseowner ~= i then
+                    print(i)
+                    mouseowner = i
+                    break
+                end
+            end
+        end
+    end
     if environment ~= "env" then
         -- listen to keys when user is playing
         if keyprompt then
@@ -1890,6 +1904,11 @@ end
 
 
 function love.quit()
-    env_thread:wait()
+    love.audio.stop()
+    if environment ~= "play" then
+        send_channel:push("CLOSE")
+        env_thread:wait()
+    end
+    love.timer.sleep( 1 )
     return false
 end

@@ -1,0 +1,47 @@
+\subsection{API de PettingZoo}
+
+Como ya habiamos mencionado en el apartado del Estado del arte, PettingZoo es una librería que ofrece una gran cantidad de entornos multiagente. Una de las ventajas de esta librería, es que ofrece una estructura de creación de entornos muy clara. Esta estructura es muy similar a la estructura de creación de entornos de OpenAI que ya habiamos comentado anteriormente. Seguir esta estructura en un entorno facilita el entrenamiento de agentes, ya que no es necesario modificar el codigo demasiado si la mayoria de entornos siguen el mismo patron. Por esto, tal y como habiamos planteado en el apartado de Alcance, usaremos la estructura de PettingZoo para nuestro entorno.
+
+En primer lugar, para diseñar un entorno es necesario que tipo de entorno será. Para esto PettingZoo provee de diferntes clases para diferentes tipos de entorno. Existen varios tipos de entorno multiagente, por ejemplo: entornos por turnos, entornos paralelos, etc. En nuestro caso, los agentes que actuaran en el juego lo harán a la vez, por lo tanto, la clase más apropiada será ParallelEnv, diseñada para entornos donde ambos agentes actuan en paralelo.
+
+Una vez elegida la clase a partir de la cual crearemos el entorno, faltaría diseñar unas funciones y atributos especificos, que gracias a la estructura de PettingZoo siempre son los mismos. Las funciones y atributos que deberemos implementar son las siguientes:
+
+\begin{itemize}
+    \item Atributo observation\_ space.
+    \item Atributo action\_ space.
+    \item Atributo possible\_ agents.
+    \item Función Render.
+    \item Función Close.
+    \item Función Reset.
+    \item Función Step.
+\end{itemize}
+
+En los siguientes apartados realizaremos una breve explicacion cual es el objetivo de cada uno de estos metodos o atributos.
+
+\subsubsection*{Atributo observation\_ space}
+
+Este atributo sirve para definir que forma tendrán las observaciones que proporciona el entorno. Para definir este atributo se usa la API de OpenAI, en particular el modulo Spaces. En nuestro caso, como explicaremos más adelante, se usará una imagen RGB de dimensiones 600 x 800. Esta se representa usando la API de OpenAI como la clase Box.
+
+\subsubsection*{Atributo action\_ space}
+
+Este atributo sirve para definir que forma deben tener las acciones tomadas por el agente. Al igual que con el atributo observation\_ space, se define usando la API de OpenAI. En nuestro caso, como explicaremos más tarde, usaremos una lista de diferentes valores donde cada posicion de la lista codificará el uso de las diferentes acciones que puede realizar el agente en el entorno. Esta lista se representa usando la API de OpenAI como la clase MultiDiscrete.
+
+\subsubsection*{Atributo possible\_ agents}
+
+Este atributo define los posibles agentes que puede tener el entorno. En nuestro caso especifico, puede tener 2 jugadores.
+
+\subsubsection*{Función Render}
+
+Esta funcion se encarga de mostrar de forma grafica lo que esta sucediendo en el entorno. Esto puede ser mostrando texto por la consola, creando un display de imagenes, etc. En nuestro caso, se abrirá una ventana del modulo Pygame \cite {pygame} con la información de la ultima captura de pantalla realizada.
+
+\subsubsection*{Función Close}
+
+Esta funcion se encarga de cerrar el entorno de forma segura, destruyendo los elementos que se hayan de destruir. En nuestro caso, es necerio cerrar el modulo mss \cite {mss}, cerrar el thread de communicación, destruir el proceso de Xvfb \cite {xvfb} y el proceso de Mari0.
+
+\subsubsection*{Función Reset}
+
+Esta funcion se encarga de rehacer el entorno de forma que sea seguro llamar a los metodos Step y Render sin problemas. Además debe comenzar el entorno desde el principio. En nuestro caso simplemente ejecutamos la funcion de Reset implementada en el juego.
+
+\subsubsection*{Función Step}
+
+Esta funcion se encarga de recibir las acciones de los agentes, ejecutarlas y devolver la información del entorno. En particular debe devolver para cada agente la observacion del entorno, la recompensa obtenida por las acciones realizadas, si el entorno se ha finalizado y alguna infomación adicional.
