@@ -320,7 +320,7 @@ class mari0_env(ParallelEnv, EzPickle):
         self._send_command(command)
         reward = DEFAULT_STEP_REWARD
         reward += self._get_return_command(0)
-        print(f"display: {self.display} -> {reward}")
+        # print(f"display: {self.display} -> {reward}")
         return reward
 
     def _eval_game_over(self) -> bool:
