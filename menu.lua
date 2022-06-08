@@ -1167,7 +1167,7 @@ function loadbackground(background)
 		local t = s2[1]:split(",")
 
 		if math.fmod(#t, 15) ~= 0 then
-			print("Incorrect number of entries: " .. #t)
+			-- print("Incorrect number of entries: " .. #t)
 			return false
 		end
 
@@ -1341,7 +1341,7 @@ function loadonlinemappacks()
 	local delete = {}
 	for i = 1, #onlinemappacklist do
 		if not love.filesystem.getInfo( "mappacks/" .. onlinemappacklist[i] .. "/version.txt") or not love.filesystem.getInfo( "mappacks/" .. onlinemappacklist[i] .. "/settings.txt") then
-			print("!")
+			-- print("!")
 			table.insert(delete, i)
 		end
 	end
@@ -1460,7 +1460,7 @@ function downloadmappacks()
 		end
 
 		if version < versionlist[i] then
-			print("DOWNLOADING MAPPACK: " .. maplist[i])
+			-- print("DOWNLOADING MAPPACK: " .. maplist[i])
 
 			--draw
 			currentdownload = i
@@ -1535,7 +1535,7 @@ function downloadmappacks()
 			downloaderror = true
 			break
 		else
-			print("Download succeeded.")
+			-- print("Download succeeded.")
 		end
 	end
 
@@ -2133,7 +2133,7 @@ function downloadfile(url, target, checksum)
 	end
 
 	if checksum ~= sha1(data) then
-		print("Checksum doesn't match!")
+		-- print("Checksum doesn't match!")
 		return false
 	end
 

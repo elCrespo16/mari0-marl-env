@@ -99,7 +99,7 @@ function game_load(suspended)
 		customtiles = false
 		customtilecount = 0
 	end
-	print("Custom tileset loaded in: " .. round(love.timer.getTime()-bla, 5))
+	-- print("Custom tileset loaded in: " .. round(love.timer.getTime()-bla, 5))
 
 	smbspritebatch = {}
 	portalspritebatch = {}
@@ -122,7 +122,7 @@ function game_load(suspended)
 		custommusic = "mappacks/" .. mappack .. "/music.mp3"
 		music:load(custommusic)
 	end
-	print(custommusic)
+	-- print(custommusic)
 
 	--FINALLY LOAD THE DAMN LEVEL
 	levelscreen_load("initial")
@@ -2130,7 +2130,7 @@ function startlevel(level)
 			mazegates[i] = maxgate
 		end
 	else
-		print("Mazenumber doesn't fit!")
+		-- print("Mazenumber doesn't fit!")
 	end
 
 	--background
@@ -2252,9 +2252,9 @@ function startlevel(level)
 end
 
 function loadmap(filename)
-	print("Loading " .. "mappacks/" .. mappack .. "/" .. filename .. ".txt")
+	-- print("Loading " .. "mappacks/" .. mappack .. "/" .. filename .. ".txt")
 	if not love.filesystem.getInfo("mappacks/" .. mappack .. "/" .. filename .. ".txt") then
-		print("mappacks/" .. mappack .. "/" .. filename .. ".txt not found!")
+		-- print("mappacks/" .. mappack .. "/" .. filename .. ".txt not found!")
 		return false
 	end
 	local s = love.filesystem.read( "mappacks/" .. mappack .. "/" .. filename .. ".txt" )
@@ -2264,7 +2264,7 @@ function loadmap(filename)
 	local t = s2[1]:split(",")
 
 	if math.fmod(#t, 15) ~= 0 then
-		print("Incorrect number of entries: " .. #t)
+		-- print("Incorrect number of entries: " .. #t)
 		return false
 	end
 
@@ -3556,7 +3556,7 @@ function savemap(filename)
 	love.filesystem.createDirectory( "mappacks/" .. mappack )
 
 	love.filesystem.write("mappacks/" .. mappack .. "/" .. filename .. ".txt", s)
-	print("Map saved as " .. "mappacks/" .. filename .. ".txt")
+	-- print("Map saved as " .. "mappacks/" .. filename .. ".txt")
 end
 
 function savelevel()

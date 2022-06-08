@@ -1,3 +1,4 @@
+
 import functools
 import os
 import subprocess
@@ -13,6 +14,7 @@ from env_commands import CursorCommand, Factory, GetRewardsCommand, GetRewardsCo
     MoveUpCommand, ReloadCommand, UseCommand, Portal1Command, Portal2Command, EvalGameOverCommand, StartGameCommand
 from gym.spaces import MultiDiscrete, Box
 from pettingzoo import ParallelEnv
+from gym.utils import EzPickle
 
 
 def env(players: int = 2, human: bool = False):
@@ -31,7 +33,7 @@ SCR_D = 3  # Screnn channels, RGB
 DEFAULT_STEP_REWARD = -0.1
 
 
-class mari0_env(ParallelEnv):
+class mari0_env(ParallelEnv, EzPickle):
     metadata = {"render_modes": ["human"], "name": "mari0"}
 
     def __init__(self, players: int = 2, human_player: bool = False):
@@ -40,6 +42,7 @@ class mari0_env(ParallelEnv):
         starts the virtual frame buffer and starts the mss module. If the paramenter human_player is True, then the game will
         be inicialized on the main window and the player 1 will be the controlled by the human player.
         """
+        EzPickle.__init__(self, players, human_player)
         self.human_player = human_player
         self.players = players
         if human_player:
@@ -55,8 +58,9 @@ class mari0_env(ParallelEnv):
             self.possible_agents = [f"player_{r}" for r in range(1, players + 1)]
         else:
             self.possible_agents = [f"player_{r}" for r in range(0, players)]
-        self.xvfb_process, _ = self._start_game()
-        self.controller_channel, self.reward_channel, self.communication_thread = self._start_controller()
+        self.xvfb_process, game_proc, self.display = self._start_game()
+        port = self.get_communication_port(game_proc=game_proc)
+        self.controller_channel, self.reward_channel, self.communication_thread = self._start_controller(port)
         time.sleep(3)
         if human_player:
             self._send_command(StartGameCommand("bowser cti", players + 1))
@@ -74,13 +78,32 @@ class mari0_env(ParallelEnv):
             assert "offset_x" in self.config
             assert "offset_y" in self.config
 
-    def _start_controller(self) -> tuple:
+    def get_communication_port(self, game_proc: subprocess.Popen) -> int:
+        port_found = False
+        attemps = 1
+        while not port_found and attemps < 5:
+            try:
+                std = game_proc.stderr.readline()
+                print(std)
+                port = int(std)
+                port_found = True
+            except:
+                attemps += 1
+        if attemps == 5:
+            self.mss_grabber.close()
+            game_proc.terminate()
+            self.xvfb_process.terminate()
+            raise Exception("Couldn't get communication port")
+        return port
+
+
+    def _start_controller(self, port: int) -> tuple:
         """
         This method initializes the communication thread between the game and the environment, returning the channels to send and recieve data
         """
         env_channel = Queue(-1)
         receive_channel = Queue(-1)
-        thread = Thread(target=controller, args=(env_channel, receive_channel))
+        thread = Thread(target=controller, args=(env_channel, receive_channel, port))
         thread.start()
         return env_channel, receive_channel, thread
 
@@ -103,12 +126,12 @@ class mari0_env(ParallelEnv):
         game_proc = subprocess.Popen(cmd,
                                      env=os.environ.copy(),
                                      shell=False,
-                                     stderr=subprocess.STDOUT)
+                                     stderr=subprocess.PIPE,)
         time.sleep(2)  # Give game a couple seconds to start up
         self.mss_grabber = mss.mss()
         os.environ["DISPLAY"] = f"{initial_disp}"
         if game_proc.poll() is None:  # Poll the process to see if it exited early
-            return xvfb_proc, game_proc
+            return xvfb_proc, game_proc, display
         raise Exception("Game couldn't open")
 
     def start_xvfb(self) -> tuple:
@@ -297,6 +320,7 @@ class mari0_env(ParallelEnv):
         self._send_command(command)
         reward = DEFAULT_STEP_REWARD
         reward += self._get_return_command(0)
+        print(f"display: {self.display} -> {reward}")
         return reward
 
     def _eval_game_over(self) -> bool:

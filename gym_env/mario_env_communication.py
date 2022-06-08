@@ -4,14 +4,13 @@ from queue import Empty, Full, Queue
 import socket              # Import socket module
 import os
 import fcntl
-from time import time
+import time
 
 
-def controller(env_channel: Queue, send_channel: Queue):
+def controller(env_channel: Queue, send_channel: Queue, port: int):
     # Create a socket object
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     host = socket.gethostname()  # Get local machine name
-    port = 55555                # Reserve a port for your service.
     fcntl.fcntl(s, fcntl.F_SETFL, os.O_NONBLOCK)
 
     # Test if game already running
@@ -49,6 +48,7 @@ def controller(env_channel: Queue, send_channel: Queue):
             except:
                 close_socket = True
             # If command needs response then wait for response
+            reward_json = None
             while wait_for_response and not close_socket:
                 try:
                     reward_json = s.recv(1024)

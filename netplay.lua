@@ -35,6 +35,6 @@ function serialize(str1,str2)
 end
 
 function message(s)
-	print(os.date("%X", os.time()) .. " " .. s)
+	-- print(os.date("%X", os.time()) .. " " .. s)
 	table.insert(messages, os.date("%X", os.time()) .. " " .. s)
 end

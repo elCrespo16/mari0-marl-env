@@ -2595,7 +2595,7 @@ function mario:startfall()
 end
 
 function mario:die(how)
-	print("Death cause: " .. how)
+	-- print("Death cause: " .. how)
 
 	marioDeads[self.playernumber] = marioDeads[self.playernumber] + 1
 

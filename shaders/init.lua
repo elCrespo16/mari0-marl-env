@@ -28,7 +28,7 @@ local function CreateShaderPass()
 				c.quad = love.graphics.newQuad(0, 0, shaders.xres, shaders.yres, po2xr, po2yr)
 			else
 				-- error or something?
-				print(string.format("shader error: could not create canvas for %s", self.cureffect or "?"))
+				-- print(string.format("shader error: could not create canvas for %s", self.cureffect or "?"))
 				self.on = false
 				return
 			end
@@ -72,7 +72,7 @@ local function CreateShaderPass()
 			if effect.supported == nil then
 				effect.supported = pcall(love.graphics.setShader, effect[1])
 				if not effect.supported then
-					print(string.format("Error setting shader: %s!", self.cureffect))
+					-- print(string.format("Error setting shader: %s!", self.cureffect))
 				end
 			elseif effect.supported then
 				love.graphics.setShader(effect[1])
@@ -111,7 +111,7 @@ function shaders:init(numpasses)
 					end
 					self.effects[filename] = {effect, str, defs}
 				else
-					print(string.format("shader (%s) is fucked up, yo:\n", filename), effect)
+					-- print(string.format("shader (%s) is fucked up, yo:\n", filename), effect)
 				end
 			end
 		end
@@ -142,7 +142,7 @@ function shaders:set(i, shadername)
 		pass.on = true
 		pass.cureffect = shadername
 		pass:useCanvas()
-		print(string.format("post-processing shader selected for pass %d: %s", i, shadername))
+		-- print(string.format("post-processing shader selected for pass %d: %s", i, shadername))
 	end
 end
 

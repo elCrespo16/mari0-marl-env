@@ -73,7 +73,7 @@ function music:update()
 		end
 	end
 	local err = self.thread:getError()
-	if err then print(err) end
+	-- if err then print(err) end
 end
 
 function music:onLoad(name, source)

@@ -24,7 +24,6 @@ function love.load(args)
         marioDeads[i] = 0
     end
     marioKeys = {}
-    distance_to_end = 0
     last_distance = false
     nextLevelReward = false
     factory = Factory:new()
@@ -980,11 +979,15 @@ function love.update(dt)
     if environment == "env" or environment == "dev" then
         command = env_channel:pop()
         if command then
-            local c = parse_command(command)
-            for i, com in pairs(c) do
-                local response = com:execute()
-                if response then
-                    send_channel:push(response)
+            if command == "CLOSE" then
+                CloseCommand:run()
+            else
+                local c = parse_command(command)
+                for i, com in pairs(c) do
+                    local response = com:execute()
+                    if response then
+                        send_channel:push(response)
+                    end
                 end
             end
         end
@@ -1430,7 +1433,6 @@ function love.keypressed(key, unicode)
         if players then
             for i = 1, players do
                 if mouseowner ~= i then
-                    print(i)
                     mouseowner = i
                     break
                 end

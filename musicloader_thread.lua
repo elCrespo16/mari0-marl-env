@@ -29,7 +29,7 @@ local function getfilename(name)
 	if love.filesystem.getInfo(filename).type == "file" then
 		return filename
 	else
-		print(string.format("thread can't load \"%s\": not a file!", filename))
+		-- print(string.format("thread can't load \"%s\": not a file!", filename))
 	end
 end
 

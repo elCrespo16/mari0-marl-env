@@ -2,9 +2,10 @@
 local socket = require("socket")
 local json = require("gym_env.json")
 -- create a TCP socket and bind it to the local host, at any port
-local server = assert(socket.bind("*", 55555))
+local server = assert(socket.bind("*", 0))
 -- find out which port the OS chose for us
 local ip, port = server:getsockname()
+io.stderr:write(port .. "\n")
 -- print a message informing what's up
 local env_channel = love.thread.getChannel("pythonCommands")
 local send_channel = love.thread.getChannel("loveRewards")
@@ -55,10 +56,11 @@ if not con_status then
                 end
             end
         else
-            print("Lua: Error " .. status)
+            -- print("Lua: Error " .. status)
             close = true
         end
         -- done with client, close the object
     end
+    env_channel:push("CLOSE")
     client:close()
 end
