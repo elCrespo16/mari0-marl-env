@@ -1,13 +1,13 @@
-\section{Sistema de recompensas}
+\chapter{Sistema de recompensas}
 
-Finalmente, una vez implementado el sistema de comunicacion, solo quedaba diseñar el sistema de recompensas de los agentes. Para diseñar este sistema debiamos tener en cuenta los siguientes hechos:
+Finalmente, una vez implementado el sistema de comunicación, solo quedaba diseñar el sistema de recompensas de los agentes. Para diseñar este sistema debíamos tener en cuenta los siguientes hechos:
 
 \begin{itemize}
     \item Medir el progreso de los agentes en un puzzle es muy complicado, ya que existen muchas formas de resolver el mismo puzzle.
-    \item Ambos agentes deben estar presentes en la escena porque si no las observaciones no tendran ninguna relacion con las acciones tomadas.
-    \item Es importante intentar que los puzzles se resuelvan en el menor numero de pasos.
+    \item Ambos agentes deben estar presentes en la escena porque si no los agentes estarían tomando decisiones con base en una observación que no les aporta ninguna información relevante.
+    \item Es importante intentar que los puzzles se resuelvan en el menor número de pasos.
     \item Para completar un nivel ambos agentes deben llegar al final de este, por lo tanto no se puede premiar que un agente se adelante y deje al otro atrás.
     \item Las posibles muertes de los agentes deben penalizarse.
 \end{itemize}
 
-Teniendo en cuenta estos hechos, el sistema de recompensas que diseñamos fue el siguiente. Cada accion tomada por los agentes comporta una penalización pequeña de -0.1 . Con esto conseguimos que los puzzles traten de resolverse en el menor numero de pasos. Cuando cualquiera de los agentes muere se aplica una penalización grande de -10, al igual que si alguno de los agentes no se encuentra dentro de la escena. Para medir la progresion de los agentes a traves de los niveles, se usa la distancia del jugador más cercano al inicio. De esta manera si un jugador avanza excesivamente dejando al otro atrás, no se le otorgará ninguna recompensa. Solo se otorgará recompensa cuando ambos agentes avancen hacia el final.  Esta recompensa se otorga cada unidad que el jugador más cercano al inicio se aleja de este. Esta recomensa es de 1. Finalmente cuando los agentes lleguen al final de un nivel se les recompensará gratamente con una recompensa de 100.
+Teniendo en cuenta estos hechos, el sistema de recompensas que diseñamos fue el siguiente. Cada acción tomada por los agentes comporta una penalización pequeña de -0.1. Con esto conseguimos que los puzzles traten de resolverse en el menor número de pasos. Cuando cualquiera de los agentes muere se aplica una penalización grande de -10, al igual que si alguno de los agentes no se encuentra dentro de la escena se otorga una recompensa de -5. Para medir la progresión de los agentes a través de los niveles, se usa la distancia del jugador más cercano al inicio. De esta manera si un jugador avanza excesivamente dejando al otro atrás, no se le otorgará ninguna recompensa. Solo se otorgará recompensa cuando ambos agentes avancen hacia el final.  Esta recompensa se otorga cada unidad que el jugador más cercano al inicio se aleja punto de inicio del mapa. Esta recompensa es de 1. Finalmente cuando los agentes lleguen al final de un nivel se les recompensará gratamente con 100 puntos.

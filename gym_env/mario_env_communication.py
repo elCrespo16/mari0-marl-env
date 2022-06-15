@@ -32,9 +32,9 @@ def controller(env_channel: Queue, send_channel: Queue, port: int):
         while not close_socket:
             # Try get commands
             try:
-                data = env_channel.get(timeout=5)
+                data = env_channel.get(timeout=90)
             except Empty:
-                continue
+                return
             wait_for_response = False
             # Check if close command or if command needs response
             for c in data:
@@ -42,7 +42,7 @@ def controller(env_channel: Queue, send_channel: Queue, port: int):
                     close_socket = True
                 if c["need_response"]:
                     wait_for_response = True
-            data_json = json.dumps(data) # Parse command into json
+            data_json = json.dumps(data)  # Parse command into json
             try:
                 s.sendall(f"{data_json} \n".encode("utf_8"))
             except:
@@ -66,4 +66,3 @@ def controller(env_channel: Queue, send_channel: Queue, port: int):
                                 send_channel.put(reward, timeout=5)
                             except Full:
                                 pass
-

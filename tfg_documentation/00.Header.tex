@@ -1,17 +1,24 @@
 
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt,oneside]{book}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{ifpdf,newtxtext,newtxmath} 
+\newenvironment{abstract}{}{}
 \usepackage{array,dcolumn,multirow,hevea,abstract,hanging,float}
 
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]{\normalfont\bfseries}{}{0pt}{
+    \Huge
+    \vspace{-3cm}
+}
 \usepackage[pdftex]{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 \usepackage{rotating}
 \usepackage{caption}
 
 \usepackage{makeidx} 
-\usepackage{parskip}
+\usepackage[skip=10pt,parfill=20pt]{parskip}
 
 \pagenumbering{arabic}
 
@@ -41,7 +48,6 @@
 \renewcommand{\floatpagefraction}{.9}
 \widowpenalty=1000
 \clubpenalty=1000
-\setlength{\parskip}{0ex}
 \let\tempone\itemize
 \let\temptwo\enditemize
 \let\tempthree\enumerate

@@ -10,7 +10,6 @@ io.stderr:write(port .. "\n")
 local env_channel = love.thread.getChannel("pythonCommands")
 local send_channel = love.thread.getChannel("loveRewards")
 
-
 -- wait for a connection from any client
 server:settimeout(90)
 local client, con_status = server:accept()
@@ -28,10 +27,10 @@ if not con_status then
         local line, status = client:receive()
         -- if there was no error, parse command put into channel
         if not status then
-            line = json.decode(line) 
+            line = json.decode(line)
             local response_recived = true
             -- Check if command needs response and if close command
-            for i, val in pairs(line) do 
+            for i, val in pairs(line) do
                 if val["need_response"] == true then
                     response_recived = false
                 end
@@ -44,14 +43,14 @@ if not con_status then
             while not response_recived and not close do
                 local response = send_channel:pop()
                 if response then
-                    if response ~= "NP" then --Debug purposes
+                    if response ~= "NP" then -- Debug purposes
                         if response == "CLOSE" then
                             close = true
                         end
                         response = json.encode(response)
                         client:send(response .. "\n")
                     end
-                    
+
                     response_recived = true
                 end
             end

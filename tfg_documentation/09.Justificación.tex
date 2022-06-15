@@ -1,24 +1,24 @@
-\section{Justificación}
-Cabe destacar que una parte importante de este proyecto consistirá en una investigación del estado del arte en los entornos multiagente. En este apartado veremos un breve conjunto de los posibles entornos que usaremos como referencia. Más tarde discutiremos las posibles ventajas y desventajas de adaptar un entorno para nuestro fin. Los ejemplos de entornos que presentaremos aquí pueden ser candidatos a ser usados para nuestra adaptación, pero primero necesitaremos realizar una serie de métricas cualitativas para poder compararlos. También existe la posibilidad de que diseñemos un entorno desde 0.  
+\chapter{Justificación}
+Cabe destacar que una parte importante de este proyecto consistirá en una investigación del estado del arte en los entornos multiagente. En este apartado veremos un breve conjunto de algunos de los posibles entornos que podríamos usar como referencia. Más tarde discutiremos las posibles ventajas y desventajas de adaptar un entorno para nuestro fin. Los ejemplos de entornos que presentaremos aquí pueden ser candidatos a ser usados para nuestra adaptación, pero primero necesitaremos realizar una serie de métricas cualitativas para poder compararlos. También existe la posibilidad de que diseñemos un entorno desde 0.  
 
 Las principales ventajas de crear un entorno desde cero son:
 \begin{itemize}
     \item Puesto que no empezamos desde una estructura previa, podemos crear un entorno tan complicado y variado como queramos. Realizar esto con una estructura previa como un videojuego resultaría mucho más complicado, puesto que para añadir ciertas interacciones deberíamos modificar o implementar nuevas características para ese videojuego. Este tipo de tareas se aleja del objetivo del trabajo además de requerir una gran cantidad de tiempo.
-    \item Tenemos la posibilidad de usar la tecnología que más nos convenga y nos facilite más el desarrollo. En cambio, si usamos una solución existente, debemos adaptarnos a la tecnología usada en esta solución. Esto puede obligarnos a usar frameworks o lenguajes de programación completamente desconocidos.  
+    \item Tenemos la posibilidad de usar la tecnología que más nos convenga y nos facilite más el desarrollo. En cambio, si usamos una solución existente, debemos adaptarnos a la tecnología usada en esta solución. Esto puede obligarnos a usar \emph{frameworks} o lenguajes de programación completamente desconocidos.  
 \end{itemize}
 
 En comparación, las ventajas de usar una solución existente son las siguientes:
 
 \begin{itemize}
-    \item Puesto que partimos de una base, reducimos drásticamente el tiempo necesario para desarrollar nuestro entorno. Esto es un aspecto clave a tener en cuenta debido a la complejidad que supone de por sí el desarrollar un entorno multiagente que contenga elementos complejos como comercio, interacción entre agentes...
-    \item No tenemos que preocuparnos de aspectos más simples y comunes de entornos para un único agente, puesto que ya estarán implementados en la base que hayamos usado. Así que podemos profundizar y pulir los aspectos nuevos que queremos implementar.
-    \item Dispondremos de la documentación y de la comunidad creadora del entorno, que nos puede facilitar el trabajo de implementación usando trabajo ya realizado por otros investigadores en la misma área.
+    \item Puesto que partimos de una base, reducimos drásticamente el tiempo necesario para desarrollar nuestro entorno. Esto es un aspecto clave a tener en cuenta debido a la complejidad que supone de por sí el desarrollar un entorno multiagente que contenga elementos complejos como comercio, interacción entre agentes, cooperación, competición, etc.
+    \item En caso de mejorar un entorno que ya sirva para entrenar múltiples agentes, no tenemos que preocuparnos de aspectos más simples y comunes de entornos para un único agente, puesto que ya estarán implementados en la base que hayamos usado. Así que podemos profundizar y pulir los aspectos nuevos que queremos implementar.
+    \item Dispondremos de la documentación y de la comunidad creadora del entorno, que nos puede facilitar el trabajo de implementación y de comprensión del entorno.
     \item Puesto que ya habrá una base de código escrita dispondremos de ejemplos para experimentar y aprender el entorno. Esto es muy importante teniendo en cuenta la falta de experiencia en este campo.
 \end{itemize}
 
 Puesto que uno de los principales riesgos que puede sufrir este proyecto es la falta de tiempo y de experiencia en el campo, el planteamiento que seguiremos será el siguiente:
 \begin{enumerate}
-    \item Realizar una búsqueda en el estado del arte de estos entornos multiagente. Esta búsqueda nos servirá para valorar las posibles soluciones que podríamos adaptar.
+    \item Realizar una búsqueda en el estado del arte de estos entornos multiagente y en videojuegos o simuladores open source que puedan convertirse en entornos multiagente. Esta búsqueda nos servirá para valorar las posibles soluciones que podríamos adaptar.
     \item Una vez realizada la exploración, debemos filtrar los posibles candidatos. Finalmente decidiremos si alguno de los candidatos restantes nos proporcionará los elementos necesarios. En caso de que ninguno de ellos nos sea de utilidad y como último recurso, plantearemos la opción de crear un entorno desde 0.  
 \end{enumerate}
 

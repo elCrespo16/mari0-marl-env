@@ -1,16 +1,19 @@
 from ast import arg
 import numpy as np
 
+
 class Command:
     def __init__(self, name) -> None:
         self.name = name
         self.need_response = True
+
 
 class GameCommand(Command):
     def __init__(self, name, player) -> None:
         super().__init__(name)
         self.player = player
         self.need_response = False
+
 
 class StartGameCommand(Command):
     def __init__(self, map: str, players: int = 2) -> None:
@@ -25,18 +28,22 @@ class ResetCommand(Command):
         super().__init__("Reset")
         self.need_response = False
 
+
 class CloseCommand(Command):
     def __init__(self) -> None:
         super().__init__("Close")
         self.need_response = False
 
+
 class EvalGameOverCommand(Command):
     def __init__(self) -> None:
         super().__init__("EvalGameOver")
 
+
 class GetRewardsCommand(Command):
     def __init__(self) -> None:
         super().__init__("GetRewards")
+
 
 class MoveCommand(GameCommand):
     def __init__(self, player: int, *args) -> None:
@@ -50,16 +57,19 @@ class MoveCommand(GameCommand):
         else:
             self.direction = "left"
 
+
 class MoveUpCommand(GameCommand):
     def __init__(self, player: int, *args) -> None:
         super().__init__("Move", player=player)
         self.player = player
         self.direction = "up"
 
+
 class ReloadCommand(GameCommand):
     def __init__(self, player: int, *args) -> None:
         super().__init__("Reload", player=player)
         self.player = player
+
 
 class UseCommand(GameCommand):
     def __init__(self, player: int, *args) -> None:
@@ -70,12 +80,14 @@ class UseCommand(GameCommand):
         else:
             self.side = "right"
 
+
 class Portal1Command(GameCommand):
     def __init__(self, player: int, *args) -> None:
         super().__init__("Portal", player=player)
         self.player = player
         self.portal = 1
         self.angle = args[0] if len(args) >= 0 else 0
+
 
 class Portal2Command(GameCommand):
     def __init__(self, player: int, *args) -> None:
@@ -84,14 +96,16 @@ class Portal2Command(GameCommand):
         self.portal = 2
         self.angle = args[0] if len(args) >= 0 else 0
 
+
 class CursorCommand(GameCommand):
     def __init__(self, player: int, *args) -> None:
         super().__init__("Cursor", player=player)
 
+
 class Factory:
     def __init__(self) -> None:
         self.register = {}
-    
+
     def registry(self, position: int, command: Command) -> None:
         """
         Function to register an action to a certain position in the action array
@@ -104,21 +118,19 @@ class Factory:
         with the commands respective to the action
         """
         commands = []
-        for i, arg in np.ndenumerate(action):
-            if arg != 0:
-               commands.append(self.register[i[0]](player, int(arg)).__dict__)
-        return commands
     
+        for i, arg in np.ndenumerate(action):
+            if arg and arg != 0:
+                if isinstance(i, tuple):
+                    commands.append(self.register[i[0]](
+                        player, int(arg)).__dict__)
+                else:
+                    commands.append(self.register[i](
+                        player, int(arg)).__dict__)
+        return commands
+
     def parse_str(self, player: int, pos: int, val: int) -> list:
         """
         Debug function to return a command based on the position of it in the action array
         """
         return self.register[pos](player, int(val))
-
-
-
-
-
-
-
-    

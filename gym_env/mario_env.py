@@ -6,8 +6,9 @@ import time
 import numpy as np
 import mss
 import yaml
-
 from queue import Empty, Full, Queue
+
+from xvfbwrapper import Xvfb
 from threading import Thread
 from mario_env_communication import controller
 from env_commands import CursorCommand, Factory, GetRewardsCommand, GetRewardsCommand, ResetCommand, CloseCommand, MoveCommand, \
@@ -36,6 +37,17 @@ DEFAULT_STEP_REWARD = -0.1
 class mari0_env(ParallelEnv, EzPickle):
     metadata = {"render_modes": ["human"], "name": "mari0"}
 
+    class EnvStatus:
+        """
+        Class representing the status of the env
+        """
+
+        def __init__(self) -> None:
+            self.vdisplay_active = False
+            self.mss_active = False
+            self.game_active = False
+            self.communication = False
+
     def __init__(self, players: int = 2, human_player: bool = False):
         """
         This function defines the number of agents, load the config file, starts the communication thread, starts the game,
@@ -43,29 +55,33 @@ class mari0_env(ParallelEnv, EzPickle):
         be inicialized on the main window and the player 1 will be the controlled by the human player.
         """
         EzPickle.__init__(self, players, human_player)
+        self.display = 0
+        self.initial_display = os.environ["DISPLAY"]
+        self.xvfb_process = None
+        self.game_proc = None
+        self.controller_channel = None
+        self.reward_channel = None
+        self.communication_thread = None
+        self.status = self.EnvStatus()
         self.human_player = human_player
+        self.mss_grabber = None
+        self._screen = None                     # Pygame screen if render is used
+        self.pixel_array = None                 # Last screenshot of the environment
         self.players = players
+        self.command_factory = Factory()        # Factory of commands
         if human_player:
             assert players < 4
+            self.possible_agents = [
+                f"player_{r}" for r in range(1, players + 1)]
         else:
             assert players <= 4
-        self.load_config()
-        self.command_factory = Factory()  # Factory of commands
-        self._registerFactory()
-        self._screen = None  # Pygame screen if render is used
-        self.pixel_array = None  # Last screenshot of the environment
-        if human_player:
-            self.possible_agents = [f"player_{r}" for r in range(1, players + 1)]
-        else:
             self.possible_agents = [f"player_{r}" for r in range(0, players)]
-        self.xvfb_process, game_proc, self.display = self._start_game()
-        port = self.get_communication_port(game_proc=game_proc)
-        self.controller_channel, self.reward_channel, self.communication_thread = self._start_controller(port)
-        time.sleep(3)
-        if human_player:
-            self._send_command(StartGameCommand("bowser cti", players + 1))
-        else:
-            self._send_command(StartGameCommand("bowser cti", players))
+        self.load_config()
+        self._registerFactory()
+        self._start_game()
+        port = self.get_communication_port()
+        self._start_controller(port)
+        self.first_reset = True
 
     def load_config(self) -> None:
         """
@@ -78,96 +94,66 @@ class mari0_env(ParallelEnv, EzPickle):
             assert "offset_x" in self.config
             assert "offset_y" in self.config
 
-    def get_communication_port(self, game_proc: subprocess.Popen) -> int:
+    def get_communication_port(self) -> int:
+        """
+        This method reads from the sterr of mari0 expecting the port of the communication socket
+        """
         port_found = False
         attemps = 1
         while not port_found and attemps < 5:
             try:
-                std = game_proc.stderr.readline()
-                print(std)
+                std = self.game_proc.stderr.readline()
                 port = int(std)
                 port_found = True
             except:
                 attemps += 1
         if attemps == 5:
-            self.mss_grabber.close()
-            game_proc.terminate()
-            self.xvfb_process.terminate()
+            self.close()
             raise Exception("Couldn't get communication port")
         return port
 
-
-    def _start_controller(self, port: int) -> tuple:
+    def _start_controller(self, port: int) -> None:
         """
         This method initializes the communication thread between the game and the environment, returning the channels to send and recieve data
         """
-        env_channel = Queue(-1)
-        receive_channel = Queue(-1)
-        thread = Thread(target=controller, args=(env_channel, receive_channel, port))
-        thread.start()
-        return env_channel, receive_channel, thread
+        self.controller_channel = Queue(-1)
+        self.reward_channel = Queue(-1)
+        self.communication_thread = Thread(target=controller, args=(
+            self.controller_channel, self.reward_channel, port))
+        self.communication_thread.start()
+        self.status.communication = True
 
-    def _start_game(self) -> tuple:
+    def _start_game(self) -> None:
         """
         This method initializes an Xvfb service and the game using the virtual display from Xvfb and the module mss using the vitual display
         """
+        game_dir = self.config["love_game"]
+        env = "env"
         if self.human_player:
             env = "dev"
         else:
-            env = "env"
-        game_dir = self.config["love_game"]
-        initial_disp = os.environ["DISPLAY"]
-        if env == "env":
-            xvfb_proc, display = self.start_xvfb()
-        else:
-            xvfb_proc = None
+            self.display = self.start_xvfb()
         cmd = ["love", game_dir, env]
-        print(f'Starting game with comand: {cmd}')
-        game_proc = subprocess.Popen(cmd,
-                                     env=os.environ.copy(),
-                                     shell=False,
-                                     stderr=subprocess.PIPE,)
-        time.sleep(2)  # Give game a couple seconds to start up
-        self.mss_grabber = mss.mss()
-        os.environ["DISPLAY"] = f"{initial_disp}"
-        if game_proc.poll() is None:  # Poll the process to see if it exited early
-            return xvfb_proc, game_proc, display
-        raise Exception("Game couldn't open")
+        self.game_proc = subprocess.Popen(
+            cmd, env=os.environ.copy(), shell=False, stderr=subprocess.PIPE,)
+        time.sleep(3)
+        if not self.game_proc.poll():  # Poll the process to see if it exited early
+            self.status.game_active = True
+        else:
+            self.close()
+            raise Exception("Game couldn't open")
 
-    def start_xvfb(self) -> tuple:
+    def start_xvfb(self) -> int:
         """
-        This method initializes the xvfb process and returns the process and the number of display used for it
+        This method initializes the xvfb process and returns the number of display used for it
         """
-        # TODO: Usar el modulo de python xvfb manager
-        xvfb_proc = None
-        display_num = 100
-        success = False
-        # If we couldn't find an open display number after 15 attempts, give up
-        while not success and display_num >= 0:
-            display_num -= 1
-            xvfb_cmd = ["Xvfb",
-                        f":{display_num}",
-                        "-screen",
-                        "0",
-                        f"{SCR_W}x{SCR_H}x{SCR_D * 8}"]
+        self.xvfb_process = Xvfb(
+            width=SCR_W, height=SCR_H, colordepth=SCR_D * 8)
+        self.xvfb_process.start()
+        self.status.vdisplay_active = True
+        print(f'Using DISPLAY {self.xvfb_process.new_display}')
+        return self.xvfb_process.new_display
 
-            print(f'Starting xvfb with command: {xvfb_cmd}')
-
-            xvfb_proc = subprocess.Popen(
-                xvfb_cmd, shell=False, stderr=subprocess.STDOUT)
-            time.sleep(2)  # Give xvfb a couple seconds to start up
-            if xvfb_proc.poll() is None:  # Poll the process to see if it exited early
-                success = True
-            print('')  # new line
-        if not success:
-            raise Exception("Error: Failed to initialize Xvfb!")
-        print(f'Using DISPLAY {os.environ["DISPLAY"]}')
-        os.environ["DISPLAY"] = f": {display_num}"
-        print(f'Changed to DISPLAY {os.environ["DISPLAY"]}')
-        return xvfb_proc, display_num
-
-    # this cache ensures that same space object is returned for the same agent
-    # allows action space seeding to work as expected
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent=None):
         # Gym spaces are defined and documented here: https://gym.openai.com/docs/#spaces
@@ -218,10 +204,14 @@ class mari0_env(ParallelEnv, EzPickle):
         if mode == "human":
             import pygame
             if self._screen is None:
+                if self.status.vdisplay_active:
+                    os.environ['DISPLAY'] = self.initial_display
                 pygame.init()
                 self._screen = pygame.display.set_mode(
                     (SCR_W, SCR_H)
                 )
+                if self.status.vdisplay_active:
+                    os.environ['DISPLAY'] = f':{self.display}'
 
             myImage = pygame.image.frombuffer(
                 self.pixel_array.tobytes(), (SCR_W, SCR_H), "RGB"
@@ -230,30 +220,44 @@ class mari0_env(ParallelEnv, EzPickle):
             self._screen.blit(myImage, (0, 0))
             pygame.display.update()
         else:
+            self.close()
             raise ValueError("bad value for render mode")
 
     def close(self):
         """
         This function clears the virtual display process, the game process, the mss module and the communication thread
         """
-        try:
-            self._send_command(CloseCommand())
+        if self.mss_grabber:
             self.mss_grabber.close()
-            time.sleep(5)
-            if self.xvfb_process is not None:
-                self.xvfb_process.terminate()
-            # self.communication_thread.join()
-        except AttributeError:
-            pass  # We may be shut down during intialization before these attributes have been set
+        if self.status.communication:
+            self._send_command(CloseCommand())
+        time.sleep(3)
+        if self.status.game_active:
+            try:
+                self.game_proc.terminate()
+            except AttributeError:
+                pass  # We may be shut down during intialization before these attributes have been set
+        if self.status.vdisplay_active:
+            self.xvfb_process.stop()
 
     def reset(self, seed=None):
         """
         This function sets the number of agents, resets the environment to the start of the level and returns
         an screenshot of the start of the level
         """
+        if self.first_reset:
+            self.mss_grabber = mss.mss()
+            time.sleep(2)
+            self.status.mss_active = True
+            if self.human_player:
+                self._send_command(StartGameCommand(
+                    "bowser cti", self.players + 1))
+                self._send_command(CursorCommand(player=1))
+            else:
+                self._send_command(StartGameCommand(
+                    "bowser cti", self.players))
+            self.first_reset = False
         self._send_command(ResetCommand())
-        if self.human_player:
-            self._send_command(CursorCommand(player=1))
         self.agents = self.possible_agents[:]
         time.sleep(5)
         self._observe()
@@ -311,7 +315,7 @@ class mari0_env(ParallelEnv, EzPickle):
         The rewards are assigned as follows: 
         Every step -0.1
         If the mari0 that's closest to the starting point moves farther from it +1
-        if one of the marios goes out of the camera, reward -10
+        if one of the marios goes out of the camera, reward -5
         If one of the mario's dies, -10
         If reach the end of the level, +100
         If reach the end of the mappack +1000

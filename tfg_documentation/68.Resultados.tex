@@ -1,12 +1,14 @@
-\section{Resultados}
+\chapter{Resultados}
 
-Los resultados obtenidos despues de haber realizado la parte técnica del proyecto son los siguientes:
+Los resultados obtenidos después de haber realizado la parte técnica del proyecto son los siguientes:
 \begin{itemize}
-    \item Hemos inspeccionado exhaustivamente el estado del arte en entornos multiagente y plataformas opensource que puedieran servir como posibles entornos multiagente. Más adelante conseguimos definir unas metricas cualitativas para evaluar los entornos que habiamos encontrado.
-    \item Hemos desarrollado un entorno con capacidad de entrenar a 4 agentes como maximo. Este entorno obliga a la cooperacion entre agentes y esta basado en el juego opensource Mari0. El \textbf{input} de este entorno son las posibles acciones que puede realizar un jugador en este videojuego. El \textbf{output} es una imagen en formato RGB de dimensiones 600 x 800. Adicionalmente, hemos generado la documentación necesaria para que otros investigadores puedan usar el entorno para entrenar agentes. Aparte, hemos conseguido que nuestro entorno siguiera la estructura de creación de entornos de OpenAI. Este entorno disponible unicamente en el sistema operativo de Linux.
+    \item Hemos inspeccionado exhaustivamente el estado del arte en entornos multiagente y plataformas open source que pudieran servir como posibles entornos multiagente. Más adelante conseguimos definir unas métricas cualitativas para evaluar los entornos que habíamos encontrado.
+    \item Hemos desarrollado un entorno con capacidad de entrenar a 4 agentes como máximo. Este entorno obliga a la cooperación entre agentes y está basado en el juego open source Mari0. El \textbf{input} de este entorno son las posibles acciones que puede realizar un jugador en este videojuego. El \textbf{output} es una imagen en formato RGB de dimensiones 600 x 800. Adicionalmente, hemos generado la documentación necesaria para que otros investigadores puedan usar el entorno para entrenar agentes. Aparte, hemos conseguido que nuestro entorno siguiera la estructura de creación de entornos de OpenAI. Este entorno disponible únicamente en el sistema operativo de Linux.
     \item Hemos conseguido además implementar la funcionalidad de que pueda jugar un humano y varias inteligencias artificiales a la vez, pero siempre con la restricción de 4 jugadores como máximo.
-    \item Finalmente hemos conseguido entrenar un par de agentes
+    \item Finalmente hemos entrenado un par de agentes usando PPO y CNN. Aun habiendo entrenado a estos agentes con 500000 iteraciones, desafortunadamente estos agentes no son capaces de resolver ni siquiera la primera parte del primer nivel de forma consistente. Creemos que esto se debe a que el entorno es realmente complicado. Los agentes deben aprender las mecánicas del juego y aun sin obtener ninguna recompensa aparente, solucionar el puzzle con una estrategia a largo plazo.
 
 \end{itemize}
+
+El código de este entorno se encuentra en \cite {repo}.
  
 

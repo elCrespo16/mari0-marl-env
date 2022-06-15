@@ -1,20 +1,20 @@
-\subsection{Acciones}
+\section{Acciones}
 
-En el apartado de Mari0: Mario Bros con portales explicamos las diferentes acciones que un jugador podia executar en el juego base. Aunque estas acciones tienen sentido cuando el juego se utiliza por personas, algunas de estas no aportan ningun valor para el entorno. 
+En el apartado de Mari0: Mario Bros con portales explicamos las diferentes acciones que un jugador podía ejecutar en el juego base. Aunque estas acciones tienen sentido cuando el juego se utiliza por personas, algunas de estas no aportan ningún valor para el entorno. 
 
-Asi que una de las acciones fue decidir cuales acciones de todas las posible se quedarían en el entorno. Para selecionar estas acciones se analizo cual era el conjunto minimo de acciones necesarias para resolver el mapa del entorno. Estas acciones correspondian a moverse a izquierda y derecha, salto alto, usar objeto, disparar portales 1 y 2 y recargar portales. La accion de salto bajo no añade ninguna mejora al set de movimiento, ya que no hay ninguna ventaja en hacer un salto de menor tamaño. Y la accion de atacar tampoco se utiliza en el mapa ya que el jugador nunca llega al estado de Mario de fuego.
+Así que decidimos filtrar cuáles acciones de todas las posibles se quedarían en el entorno final. Para seleccionar estas acciones se analizó cuál era el conjunto mínimo de acciones necesarias para resolver el mapa del entorno. Estas acciones correspondían a moverse a izquierda y derecha, salto alto, usar objeto, disparar portales 1 y 2 y recargar portales. La acción de salto bajo no añade ninguna mejora al set de movimiento, ya que no hay ninguna ventaja en hacer un salto de menor tamaño. Y la acción de atacar tampoco se utiliza en el mapa, ya que el jugador nunca llega al estado de Mario de fuego.
 
-La siguiente tarea era decidir como se codificarian estas operaciones en la API de OpenAI. Todas las operaciones deberían tener la posibilidad de no ser ejecutadas. Nos dimos cuenta que era posible codificar todas las acciones usando numeros enteros. La codificación de las acciones fue la siguiente:
+La siguiente tarea era decidir como se codificarían estas operaciones en la API de OpenAI. Todas las operaciones deberían tener la posibilidad de no ser ejecutadas. Nos dimos cuenta de que era posible codificar todas las acciones usando números enteros. La codificación de las acciones fue la siguiente:
 
 \begin{itemize}
-	\item Si el valor de la accion es 0 significa que no debe ejecutarse.
-	\item Para acciones de una sola variante como Saltar y Recargar portales, el valor 1 significa ejecutar esa accion.
- 	\item Para la accion de Usar objeto, la orientación del personaje importa, por los tanto era necesario dar la posibilidad de usar un objeto a la derecha o a la izquierda del jugador. Por lo tanto el valor 1 simboliza coger un objeto a la izquierda del jugador y 2 un objeto a la derecha.
-	\item Para la accion de movimiento a ambos lados el valor 1 codifica movimiento a izquierda y el valor 2 a derecha.
-	\item Para las acciones de disparar portal 1 y disparar portal 2, cualquier valor diferente a 0 indica el angulo con respecto al jugador en el que se debe disparar el portal.
+	\item Si el valor de la acción es 0 significa que no debe ejecutarse.
+	\item Para acciones de una sola variante como Saltar y Recargar portales, el valor 1 significa ejecutar esa acción.
+ 	\item Para la acción de Usar objeto, la orientación del personaje importa, por lo tanto era necesario dar la posibilidad de usar un objeto a la derecha o a la izquierda del jugador. Por lo tanto el valor 1 simboliza coger un objeto a la izquierda del jugador y 2 un objeto a la derecha.
+	\item Para la acción de movimiento a ambos lados el valor 1 codifica movimiento a izquierda y el valor 2 a derecha.
+	\item Para las acciones de disparar portal 1 y disparar portal 2, cualquier valor diferente a 0 indica el ángulo con respecto al jugador en el que se debe disparar el portal.
 \end{itemize}
 
-Cada accion tiene una posicion especifica en la lista. Por ejemplo, la lista de acciones podria verse como en la tabla \ref {tab:accion}. Esta lista codificaría que el jugador se esta moviendo para la izquierda mientras realiza un salto y dispara el portal 1 con un angulo de 15 grados.
+Cada acción tiene una posición específica en la lista. Por ejemplo, la lista de acciones podría verse como en la tabla \ref {tab:accion}. Esta lista codificaría que el jugador se está moviendo para la izquierda mientras realiza un salto y dispara el portal 1 con un ángulo de 15 grados.
 
 \begin{table}[h]
 	\begin{center}
@@ -29,4 +29,4 @@ Cada accion tiene una posicion especifica en la lista. Por ejemplo, la lista de 
 \end{table}
 
 
-En otros juegos similares se suele escoger una codificacion más simple, donde todas las acciones simples se juntan en una unica posicion. En nuestro caso no decidimos usar esta codificacion ya que queriamos permitir que las acciones se ejecutaran al mismo tiempo. Aun asi, la accion de moverse hacia derecha o izquierda se ha unido en una sola posicion ya que son acciones complementarias.
+En otros juegos similares se suele escoger una codificación más simple, donde todas las acciones simples se juntan en una única posición. En nuestro caso no decidimos usar esta codificación, ya que queríamos permitir que las acciones se ejecutaran al mismo tiempo. Aun así, la acción de moverse hacia derecha o izquierda se ha unido en una sola posicion, ya que son acciones complementarias.

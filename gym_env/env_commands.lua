@@ -1,7 +1,9 @@
---Meta class
-Command = {name = ""}
+-- Meta class
+Command = {
+    name = ""
+}
 
---Derived class method new
+-- Derived class method new
 
 function Command:new(name)
     -- Base Command
@@ -65,14 +67,13 @@ function MoveCommand:run()
         local i = self.player
         if self.direction == "up" and not objects["player"][i].jumping then
             objects["player"][i]:jump()
-        else 
+        else
             marioKeys[i][self.direction] = 30
         end
-    else 
+    else
         self:error("Trying to move in game state " .. gamestate)
     end
 end
-
 
 -- RELOAD COMMAND
 
@@ -91,7 +92,7 @@ function ReloadCommand:run()
     if gamestate == "game" or gamestate == "levelscreen" then
         local i = self.player
         objects["player"][i]:removeportals()
-    else 
+    else
         self:error("Trying to reload in game state " .. gamestate)
     end
 end
@@ -114,12 +115,12 @@ function UseCommand:run()
     if gamestate == "game" or gamestate == "levelscreen" then
         local i = self.player
         if self.side == "left" then
-            objects["player"][i].pointingangle = math.rad (90)
+            objects["player"][i].pointingangle = math.rad(90)
         else
-            objects["player"][i].pointingangle = math.rad (-90)
+            objects["player"][i].pointingangle = math.rad(-90)
         end
         objects["player"][i]:use()
-    else 
+    else
         self:error("Trying to use in game state " .. gamestate)
     end
 end
@@ -135,10 +136,9 @@ function PortalCommand:new(object)
     o.name = "Portal"
     o.player = object["player"]
     o.portal = object["portal"]
-    o.angle =  object["angle"]
+    o.angle = object["angle"]
     return o
 end
-
 
 function PortalCommand:run()
     if gamestate == "game" or gamestate == "levelscreen" then
@@ -146,13 +146,13 @@ function PortalCommand:run()
         if self.angle > 180 then
             self.angle = self.angle - 360
         end
-        objects["player"][i].pointingangle = math.rad (self.angle)
-        shootportal(i, self.portal, objects["player"][i].x+6/16, objects["player"][i].y+6/16, objects["player"][i].pointingangle)
-    else 
+        objects["player"][i].pointingangle = math.rad(self.angle)
+        shootportal(i, self.portal, objects["player"][i].x + 6 / 16, objects["player"][i].y + 6 / 16,
+            objects["player"][i].pointingangle)
+    else
         self:error("Trying to shoot portal in game state " .. gamestate)
     end
 end
-
 
 -- CHANGE CURSOR OWNER COMMAND
 
@@ -170,7 +170,7 @@ end
 function CursorCommand:run()
     if gamestate == "game" or gamestate == "levelscreen" then
         mouseowner = self.player
-    else 
+    else
         self:error("Trying to change curson in game state " .. gamestate)
     end
 end
@@ -190,7 +190,8 @@ function StartGameCommand:new(object)
 end
 
 function StartGameCommand:run()
-    if gamestate == "intro" or gamestate == "menu" or gamestate == "mappackmenu" or gamestate == "onlinemenu" or gamestate == "options" then
+    if gamestate == "intro" or gamestate == "menu" or gamestate == "mappackmenu" or gamestate == "onlinemenu" or
+        gamestate == "options" then
         mappacks()
         local found = false
         for i, name in ipairs(mappackname) do
@@ -202,7 +203,7 @@ function StartGameCommand:run()
                 end
                 mappack = mappacklist[i]
                 gamestate = "menu"
-			    saveconfig()
+                saveconfig()
                 found = true
             end
         end
@@ -222,7 +223,6 @@ end
 
 ResetCommand = GameCommand:new("Reset")
 
-
 function ResetCommand:new(object)
     local o = GameCommand:new("Reset")
     setmetatable(o, self)
@@ -233,8 +233,8 @@ end
 
 function ResetCommand:run()
     for i = 1, players do
-		marioDeads[i] = 0
-	end
+        marioDeads[i] = 0
+    end
     last_distance = false
     if gamestate == "levelscreen" or gamestate == "game" then
         pausemenuopen = true
@@ -245,12 +245,12 @@ function ResetCommand:run()
         selectworld()
     elseif gamestate == "menu" then
         selectworld()
-    else 
+    else
         self:error("Trying to reset in game state " .. gamestate)
     end
 end
 
---Close command
+-- Close command
 
 CloseCommand = GameCommand:new("Close")
 
@@ -298,7 +298,6 @@ function GetRewardsCommand:new()
     return o
 end
 
-
 CHECKPOINT_REWARD = 100
 END_REWARD = 1000
 DIE_REWARD = -10
@@ -317,10 +316,10 @@ function GetRewardsCommand:respond()
     local reward = 0
     local aux = 0
     local actual_min_mario_dist = distance_to_end
-    
+
     for i = 1, players do
         reward = reward + DIE_REWARD * marioDeads[i]
-		marioDeads[i] = 0
+        marioDeads[i] = 0
         aux = objects["player"][i].x
         if aux < actual_min_mario_dist then
             actual_min_mario_dist = aux
@@ -328,7 +327,7 @@ function GetRewardsCommand:respond()
         if aux < xscroll then
             reward = reward + PLAYER_OUT_OF_CAMERA_REWARD
         end
-	end
+    end
     if not last_distance then
         last_distance = actual_min_mario_dist
     end
@@ -345,7 +344,6 @@ function GetRewardsCommand:respond()
     end
     return reward
 end
-
 
 -- Command Factory
 
@@ -370,7 +368,7 @@ end
 
 function Factory:instantiate(object)
     -- Funtion to instantiate a command using his name
-    for k,v in pairs(self.registryTable) do
+    for k, v in pairs(self.registryTable) do
         if v.name == object["name"] then
             return v:new(object)
         end
@@ -380,7 +378,7 @@ end
 
 function Factory:registry(com)
     -- Function to register a command as usable
-    table.insert( self.registryTable, com )
+    table.insert(self.registryTable, com)
 end
 
 function register_all_commands()

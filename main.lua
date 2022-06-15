@@ -976,7 +976,10 @@ function love.update(dt)
     if environment ~= "env" then
         keyprompt_update()
     end
-    if environment == "env" or environment == "dev" then
+    if environment == "env" or environment == "dev" then    
+        if  gamestate == "intro" then
+            intro_keypressed()
+        end
         command = env_channel:pop()
         if command then
             if command == "CLOSE" then
