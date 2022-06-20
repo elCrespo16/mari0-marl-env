@@ -6,3 +6,4 @@ tfg_documentation/build/
 tfg_documentation/ejemplos/
 .vscode/
 gym_env/__pycache__/
+gym_env/log/

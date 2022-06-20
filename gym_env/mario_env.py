@@ -371,6 +371,8 @@ class mari0_env(ParallelEnv, EzPickle):
         for player in self.agents:
             rewards[player] = reward
 
+        with open(f"./gym_env/log/log{self.display}.txt", "a") as f:
+            f.write(f"{reward} \n")
         # check if the game is done
         env_done = self._eval_game_over()
         dones = {}

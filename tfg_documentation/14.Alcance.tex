@@ -1,7 +1,7 @@
-\chapter{Alcance}
+\section{Alcance}
 Por lo presentado en los apartados previos, \textbf{el objetivo principal del proyecto es el desarrollo de un entorno multiagente con elementos sociales complejos}. La consecución de esta meta aportará a los investigadores de MARL un nuevo entorno donde investigar comportamientos de agentes en diversas situaciones. Para conseguir este objetivo, nos definiremos una serie de objetivos genéricos.
 
-En primer lugar, debemos escoger adecuadamente el entorno que adaptaremos para nuestro objetivo. Tal y como hemos visto existen varios posibles candidatos con sus ventajas y desventajas. Esta elección es clave, ya que marcará en gran parte el desarrollo del resto del proyecto. 
+En primer lugar, debemos escoger adecuadamente el entorno que adaptaremos para nuestro objetivo. Tal y como veremos en siguientes apartados, existen varios posibles candidatos con sus ventajas y desventajas. Esta elección es clave, ya que marcará en gran parte el desarrollo del resto del proyecto. 
 
 En segundo lugar, debemos decidir que aspectos sociales queremos implementar en este entorno. Esto depende en gran manera del entorno de partida, por ello no es posible hacerlo antes. Ejemplos de estos aspectos podrían ser: comunicación directa entre agentes mediante una serie de mensajes predefinidos, un sistema de comercio de recursos entre los agentes, un sistema de roles específicos para cada agente que obligue a su colaboración, etc. 
 
@@ -10,14 +10,13 @@ Finalmente deberemos modificar el entorno para añadir estos aspectos que hemos 
 Además, hemos identificado una serie de subobjetivos que garantizarán que el proyecto sea consistente y esté completo:
 
 \begin{itemize}
-    \item Inspeccionar el estado del arte de en entornos multiagente. 
-    \item Definir unas métricas cualitativas que permitan valorar los posibles entornos y sus características.
-    \item Entender la construcción del entorno para utilizar todas las oportunidades que nos pueda ofrecer modificando el menor código posible.
-    \item Entrenar una serie de agentes para comprobar el funcionamiento del entorno. 
-    \item Garantizar que el entorno que creemos o modifiquemos use la estructura de OpenAI / PettingZoo.
+    \item Inspeccionar el estado del arte de en entornos multiagente. (OBJ 1)
+    \item Definir unas métricas cualitativas que permitan valorar los posibles entornos y sus características. (OBJ 2)
+    \item Garantizar que el entorno que creemos o modifiquemos use la estructura de \textit{OpenAI} / \textit{PettingZoo}. (OBJ 3)
+    \item Entrenar una serie de agentes para comprobar el funcionamiento del entorno. (OBJ 4)
 \end{itemize}
  
- \section{Requisitos}
+ \subsection{Requisitos}
 
 Hemos identificado algunas necesidades para garantizar la calidad del proyecto:
 \begin{itemize}
@@ -29,7 +28,7 @@ Hemos identificado algunas necesidades para garantizar la calidad del proyecto:
 \end{itemize}
 
 
-\section{Riesgos}
+\subsection{Riesgos}
 Para un correcto desarrollo de todas las etapas del proyecto es necesario considerar posibles riesgos que puedan surgir. Los principales riesgos que hemos encontrado son los siguientes:
 \begin{itemize}
     \item Ninguno de los entornos encontrados cumple con las expectativas. \textbf{Solución}: Crearemos el entorno desde 0 usando las herramientas que mejor nos convengan.

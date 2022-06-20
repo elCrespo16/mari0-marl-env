@@ -1,6 +1,6 @@
-\section{Acciones}
+\subsection{Acciones}
 
-En el apartado de Mari0: Mario Bros con portales explicamos las diferentes acciones que un jugador podía ejecutar en el juego base. Aunque estas acciones tienen sentido cuando el juego se utiliza por personas, algunas de estas no aportan ningún valor para el entorno. 
+En el apartado de \textit{Mari0}: \textit{Mario Bros} con portales explicamos las diferentes acciones que un jugador podía ejecutar en el juego base. Aunque estas acciones tienen sentido cuando el juego se utiliza por personas, algunas de estas no aportan ningún valor para el entorno. 
 
 Así que decidimos filtrar cuáles acciones de todas las posibles se quedarían en el entorno final. Para seleccionar estas acciones se analizó cuál era el conjunto mínimo de acciones necesarias para resolver el mapa del entorno. Estas acciones correspondían a moverse a izquierda y derecha, salto alto, usar objeto, disparar portales 1 y 2 y recargar portales. La acción de salto bajo no añade ninguna mejora al set de movimiento, ya que no hay ninguna ventaja en hacer un salto de menor tamaño. Y la acción de atacar tampoco se utiliza en el mapa, ya que el jugador nunca llega al estado de Mario de fuego.
 
@@ -14,8 +14,7 @@ La siguiente tarea era decidir como se codificarían estas operaciones en la API
 	\item Para las acciones de disparar portal 1 y disparar portal 2, cualquier valor diferente a 0 indica el ángulo con respecto al jugador en el que se debe disparar el portal.
 \end{itemize}
 
-Cada acción tiene una posición específica en la lista. Por ejemplo, la lista de acciones podría verse como en la tabla \ref {tab:accion}. Esta lista codificaría que el jugador se está moviendo para la izquierda mientras realiza un salto y dispara el portal 1 con un ángulo de 15 grados.
-
+Cada acción tiene una posición específica en la lista. Por ejemplo, la lista de acciones podría verse como en la Tabla \ref {tab:accion}. Esta lista codificaría que el jugador se está moviendo para la izquierda mientras realiza un salto y dispara el portal 1 con un ángulo de 15 grados.
 \begin{table}[h]
 	\begin{center}
 		\begin{tabular}{| l | l | l | l | l | l |}
@@ -23,10 +22,10 @@ Cada acción tiene una posición específica en la lista. Por ejemplo, la lista 
 			\textbf{Movimiento} & \textbf{Salto} & \textbf{Usar} & \textbf{Recargar} & \textbf{Portal 1} & \textbf{Portal 2} \\ \hline
 			1                   & 1              & 0             & 0                 & 15                & 0                 \\ \hline
 		\end{tabular}
-		\caption{Ejemplo de set de acciones de un agente[Elaboración propia]}
+		\caption{Ejemplo de set de acciones de un agente [Elaboración propia]}
 		\label{tab:accion}
 	\end{center}
 \end{table}
 
 
-En otros juegos similares se suele escoger una codificación más simple, donde todas las acciones simples se juntan en una única posición. En nuestro caso no decidimos usar esta codificación, ya que queríamos permitir que las acciones se ejecutaran al mismo tiempo. Aun así, la acción de moverse hacia derecha o izquierda se ha unido en una sola posicion, ya que son acciones complementarias.
+En otros juegos similares se suele escoger una codificación más simple, donde todas las acciones simples se juntan en una única posición. En nuestro caso no decidimos usar esta codificación, ya que queríamos permitir que las acciones se ejecutaran al mismo tiempo. Aun así, la acción de moverse hacia derecha o izquierda se ha unido en una sola posición, ya que son acciones complementarias.

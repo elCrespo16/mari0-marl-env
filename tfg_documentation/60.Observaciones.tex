@@ -1,19 +1,17 @@
-\section{Tipo de observaciones}
+\subsection{Tipo de observaciones}
 La siguiente tarea a realizar era decidir que tipo de observaciones extraeríamos del entorno. Tal y como habíamos explicado en el apartado de Definición de conceptos, los agentes necesitan conocer el estado del entorno para poder aprender y tomar sus acciones. Para ello es necesario obtener una observación del juego. 
 
-Existen dos principales formas de obtener el estado del juego: Serializando alguna clase que contenga los principales elementos del juego o simplemente capturar la imagen producida por el videojuego. La primera alternativa se suele usar en entornos más simples donde los elementos importantes para entrenar son pocos y fácilmente serializables. Un ejemplo de este tipo de entornos puede ser el entorno Level-Based Foraging visto en el apartado Estado del arte. En este entorno simplemente se pasa una cuadrícula con los elementos que hay en cada una de ellas. Podemos ver la representación del entorno en la figura \ref {fig:foraging-2}.
-
+Existen dos principales formas de obtener el estado del juego: Serializando alguna clase que contenga los principales elementos del juego o simplemente capturar la imagen producida por el videojuego. La primera alternativa se suele usar en entornos más simples donde los elementos importantes para entrenar son pocos y fácilmente serializables. Un ejemplo de este tipo de entornos puede ser el entorno \textit{Level-Based Foraging} visto en el apartado Estado del arte. En este entorno simplemente se pasa una cuadrícula con los elementos que hay en cada una de ellas. Podemos ver la representación del entorno en la Figura \ref {fig:foraging-2}.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.3\textwidth]{img/level-base.png}
-    \caption{Entorno gráfico de Level-Based Foraging \cite {env-list}}
+    \caption{Entorno gráfico de \textit{Level-Based Foraging} \cite {env-list}}
     \label{fig:foraging-2}
 \end{figure}
 
 La segunda alternativa suele ser usada en entornos más complejos donde serializar todos los elementos es realmente complejo. Un ejemplo que utiliza esta alternativa es el entorno MALMÖ.
 
-Nuestro entorno no es lo suficientemente simple para poder usar la primera opción. Esto se debe los elementos importantes para el entrenamiento de un agente en nuestro entorno son muchos, muy variados y difícilmente serializables. Tomemos por ejemplo la figura \ref {fig:observartion} que forma parte de uno de los primeros niveles del mapa. 
-
+Nuestro entorno no es lo suficientemente simple para poder usar la primera opción. Esto se debe los elementos importantes para el entrenamiento de un agente en nuestro entorno son muchos, muy variados y difícilmente serializables. Tomemos por ejemplo la Figura \ref {fig:observartion} que forma parte de uno de los primeros niveles del mapa. 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\textwidth]{img/BCTI_observation.png}
@@ -25,7 +23,7 @@ Esta sería la lista de elementos que deberíamos serializar para el entorno en 
 
 \begin{itemize}
     \item Todos los bloques donde los jugadores pueden golpearse, incluyendo el techo del mapa. Esto es así, ya que gracias a los portales estos bloques pueden ser obstáculos o tener un papel relevante en el nivel.
-    \item La posición, velocidad, posición de los portales del jugador, etc.
+    \item La posición y velocidad de los jugadres, la posición de los portales del jugador, etc.
     \item La posición de botones, pulsadores, palancas de salto, dispensadores de gel, puertas y dispensadores de cajas. Y además incluir la relación de que elementos accionan cada botón, pulsador etc.
     \item Todos los bloques donde los jugadores pueden colocar portales.
     \item Láseres azules, láseres rojos y láseres anti-portales.

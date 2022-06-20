@@ -1,4 +1,4 @@
-\chapter{Sistema de recompensas}
+\section{Sistema de recompensas}
 
 Finalmente, una vez implementado el sistema de comunicación, solo quedaba diseñar el sistema de recompensas de los agentes. Para diseñar este sistema debíamos tener en cuenta los siguientes hechos:
 
@@ -10,4 +10,11 @@ Finalmente, una vez implementado el sistema de comunicación, solo quedaba dise�
     \item Las posibles muertes de los agentes deben penalizarse.
 \end{itemize}
 
-Teniendo en cuenta estos hechos, el sistema de recompensas que diseñamos fue el siguiente. Cada acción tomada por los agentes comporta una penalización pequeña de -0.1. Con esto conseguimos que los puzzles traten de resolverse en el menor número de pasos. Cuando cualquiera de los agentes muere se aplica una penalización grande de -10, al igual que si alguno de los agentes no se encuentra dentro de la escena se otorga una recompensa de -5. Para medir la progresión de los agentes a través de los niveles, se usa la distancia del jugador más cercano al inicio. De esta manera si un jugador avanza excesivamente dejando al otro atrás, no se le otorgará ninguna recompensa. Solo se otorgará recompensa cuando ambos agentes avancen hacia el final.  Esta recompensa se otorga cada unidad que el jugador más cercano al inicio se aleja punto de inicio del mapa. Esta recompensa es de 1. Finalmente cuando los agentes lleguen al final de un nivel se les recompensará gratamente con 100 puntos.
+Teniendo en cuenta estos hechos, el sistema de recompensas que diseñamos fue el siguiente. Cada acción tomada por los agentes comporta una penalización pequeña de -0.1. Con esto conseguimos que los puzzles traten de resolverse en el menor número de pasos. Cuando cualquiera de los agentes muere se aplica una penalización grande de -10, al igual que si alguno de los agentes no se encuentra dentro de la escena se otorga una recompensa de -5. Para medir la progresión de los agentes a través de los niveles, se usa la distancia del jugador más cercano al inicio. De esta manera si un jugador avanza excesivamente dejando al otro atrás, no se le otorgará ninguna recompensa. Solo se otorgará recompensa cuando ambos agentes avancen hacia el final.  Esta recompensa de 1 unidad se otorga cada metro que el jugador más cercano al inicio se aleja del punto de inicio del mapa. Finalmente cuando los agentes lleguen al final de un nivel se les recompensará gratamente con 100 puntos.
+
+Por lo tanto, expresando las recompensas obtenidas por el estado i-ésimo de forma matemática tendríamos:
+
+\[ reward (i) =  - 0.1 + 1 * A(i) - 10 * D(i) - 5 * O(i) + 100 * F(i) \] 
+
+Donde \textit{A(i)} es un valor de 0 o 1 que significa si el agente más cercano al inicio se ha alejado en el estado i-ésimo, \textit{D} constituye el número de muertes de agentes entre el estado i-ésimo y el estado previo al i-ésimo, \textit{O} se interpreta como un valor booleano que indica si alguno de los jugadores ha salido de la escena en el estado i-ésimo y finalmente \textit{F} que indica si se ha llegado al final del nivel.
+
